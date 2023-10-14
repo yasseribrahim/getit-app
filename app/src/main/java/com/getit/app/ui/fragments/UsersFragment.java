@@ -1,5 +1,6 @@
 package com.getit.app.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,6 +21,7 @@ import com.getit.app.Constants;
 import com.getit.app.models.User;
 import com.getit.app.persenters.user.UsersCallback;
 import com.getit.app.persenters.user.UsersPresenter;
+import com.getit.app.ui.activities.UserActivity;
 import com.getit.app.ui.adptres.UsersAdapter;
 import com.getit.app.utilities.helpers.StorageHelper;
 
@@ -32,7 +34,7 @@ public class UsersFragment extends Fragment implements UsersCallback, UsersAdapt
     private UsersAdapter usersAdapter;
     private List<User> users, searchedUsers;
     private User currentUser;
-    private int userType;
+    protected int userType;
 
     public static UsersFragment newInstance(int userType) {
         Bundle args = new Bundle();
@@ -58,10 +60,10 @@ public class UsersFragment extends Fragment implements UsersCallback, UsersAdapt
             }
         });
 
-        binding.btnAddChild.setOnClickListener(new View.OnClickListener() {
+        binding.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                openUserActivity(null);
             }
         });
 
@@ -181,13 +183,31 @@ public class UsersFragment extends Fragment implements UsersCallback, UsersAdapt
 
             StorageHelper.setCurrentUser(currentUser);
             presenter.save(currentUser, child);
-            onGetDeleteUserComplete(position);
+            onDeleteUserComplete(position);
         }
     }
 
     @Override
-    public void onGetDeleteUserComplete(int position) {
+    public void onItemEditListener(int position) {
+        if (position >= 0 && position < searchedUsers.size()) {
+            User user = searchedUsers.get(position);
+            openUserActivity(user);
+        }
+    }
+
+    @Override
+    public void onDeleteUserComplete(int position) {
         Toast.makeText(getContext(), R.string.str_message_delete_successfully, Toast.LENGTH_LONG).show();
         usersAdapter.notifyItemRemoved(position);
+    }
+
+    private void openUserActivity(User user) {
+        Intent intent = new Intent(getContext(), UserActivity.class);
+        if (user == null) {
+            intent.putExtra(Constants.ARG_ID, userType);
+        } else {
+            intent.putExtra(Constants.ARG_OBJECT, user);
+        }
+        startActivity(intent);
     }
 }

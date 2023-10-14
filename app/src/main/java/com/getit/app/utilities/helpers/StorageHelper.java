@@ -28,6 +28,14 @@ public class StorageHelper {
         }
         return currentUser;
     }
+    public static synchronized void loadCurrentUser() {
+        try {
+            String json = preferences.getString(KEY_CURRENT_USER, "");
+            currentUser = new Gson().fromJson(json, new TypeToken<User>() {
+            }.getType());
+        } catch (Exception ex) {
+        }
+    }
 
     public static synchronized void clearCurrentUser() {
         try {
@@ -48,7 +56,7 @@ public class StorageHelper {
             } catch (Exception ex) {
             }
 
-            getCurrentUser();
+            loadCurrentUser();
         }
     }
 }

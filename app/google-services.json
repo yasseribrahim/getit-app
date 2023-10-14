@@ -1,8 +1,9 @@
 {
   "project_info": {
     "project_number": "1080347201744",
-    "project_id": "getit-app-75e0e",
-    "storage_bucket": "getit-app-75e0e.appspot.com"
+    "firebase_url": "https://quizes-app-75e0e-default-rtdb.firebaseio.com",
+    "project_id": "quizes-app-75e0e",
+    "storage_bucket": "quizes-app-75e0e.appspot.com"
   },
   "client": [
     {

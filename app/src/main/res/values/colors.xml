@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#02C0D4</color>
-    <color name="colorPrimaryVariant">#4CBBCB</color>
+    <color name="colorPrimary">#4C4B4B</color>
+    <color name="colorPrimaryVariant">#000</color>
     <color name="colorOnPrimary">@color/white</color>
     <!-- Secondary brand color. -->
-    <color name="colorSecondary">#FFB400</color>
-    <color name="colorSecondaryVariant">@color/teal_700</color>
+    <color name="colorSecondary">#EC6B2B</color>
+    <color name="colorSecondaryVariant">#b34610</color>
     <color name="colorOnSecondary">@color/black</color>
 
     <!-- other colors -->
@@ -34,6 +34,12 @@
     <color name="grey_100">#F5F5F5</color>
     <color name="item_chat_bg">@color/colorPrimary</color>
     <color name="item_chat_other_bg">#e1e1e1</color>
+
+    <color name="home_color1">#019DCD</color>
+    <color name="home_color2">#8CAD4A</color>
+    <color name="home_color3">#F47224</color>
+    <color name="home_color4">#94257F</color>
+    <color name="home_color5">#FF3B30</color>
 
     <color name="profilePrimaryDark">#FF3B30</color>
     <color name="profileAccentColor">#F7F7F7</color>

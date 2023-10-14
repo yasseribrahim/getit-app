@@ -93,7 +93,7 @@ public class RegistrationActivity extends BaseActivity implements UsersCallback 
     }
 
     @Override
-    public void onGetSignupUserComplete() {
+    public void onSignupUserComplete() {
         Toast.makeText(this, R.string.str_message_added_successfully, Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
@@ -101,7 +101,7 @@ public class RegistrationActivity extends BaseActivity implements UsersCallback 
     }
 
     @Override
-    public void onGetSignupUserFail(String message) {
+    public void onSignupUserFail(String message) {
         Toast.makeText(this, getString(R.string.str_signup_fail, message), Toast.LENGTH_LONG).show();
     }
 

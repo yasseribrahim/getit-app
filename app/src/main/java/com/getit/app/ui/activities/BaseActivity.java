@@ -94,7 +94,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (user != null) {
             switch (user.getType()) {
                 case Constants.USER_TYPE_ADMIN:
-//                    intent = new Intent(this, HomeActivity.class);
+                    intent = new Intent(this, HomeActivity.class);
                     break;
                 case Constants.USER_TYPE_TEACHER:
 //                    intent = new Intent(this, com.gps.children.tracker.app.activities.users.child.HomeActivity.class);

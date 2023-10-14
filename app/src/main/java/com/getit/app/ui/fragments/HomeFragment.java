@@ -1,43 +1,33 @@
 package com.getit.app.ui.fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.getit.app.R;
-public class HomeFragment extends Fragment {
+import androidx.fragment.app.Fragment;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import com.getit.app.databinding.FragmentHomeBinding;
+import com.getit.app.persenters.courses.CoursesCallback;
+import com.getit.app.persenters.courses.CoursesPresenter;
+import com.getit.app.persenters.exams.ExamsCallback;
+import com.getit.app.persenters.exams.ExamsPresenter;
+import com.getit.app.persenters.questions.QuestionsCallback;
+import com.getit.app.persenters.questions.QuestionsPresenter;
+import com.getit.app.persenters.user.UsersCallback;
+import com.getit.app.persenters.user.UsersPresenter;
+import com.getit.app.utilities.ToastUtils;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class HomeFragment extends Fragment implements UsersCallback, CoursesCallback, QuestionsCallback, ExamsCallback {
+    private FragmentHomeBinding binding;
+    private UsersPresenter usersPresenter;
+    private CoursesPresenter coursesPresenter;
+    private QuestionsPresenter questionsPresenter;
+    private ExamsPresenter examsPresenter;
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
+    public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -45,16 +35,60 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        usersPresenter = new UsersPresenter(this);
+        coursesPresenter = new CoursesPresenter(this);
+        questionsPresenter = new QuestionsPresenter(this);
+        examsPresenter = new ExamsPresenter(this);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+    public void onResume() {
+        super.onResume();
+        usersPresenter.getUsersCount();
+        coursesPresenter.getCoursesCount();
+        questionsPresenter.getQuestionsCount();
+        examsPresenter.getExamsCount();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentHomeBinding.inflate(inflater);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onGetUsersCountComplete(long teacherCount, long studentCount) {
+        binding.teachersCounter.setText(teacherCount + "");
+        binding.studentsCounter.setText(studentCount + "");
+    }
+
+    @Override
+    public void onGetCoursesCountComplete(long count) {
+        binding.coursesCounter.setText(count + "");
+    }
+
+    @Override
+    public void onGetExamsCountComplete(long count) {
+        binding.examsCounter.setText(count + "");
+    }
+
+    @Override
+    public void onGetQuestionsCountComplete(long count) {
+        binding.questionsCounter.setText(count + "");
+    }
+
+    @Override
+    public void onFailure(String message, View.OnClickListener listener) {
+        ToastUtils.longToast(message);
+    }
+
+    @Override
+    public void onShowLoading() {
+        ProgressDialogFragment.show(getChildFragmentManager());
+    }
+
+    @Override
+    public void onHideLoading() {
+        ProgressDialogFragment.hide(getChildFragmentManager());
     }
 }

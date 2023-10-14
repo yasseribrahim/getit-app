@@ -3,6 +3,9 @@ package com.getit.app.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User implements Parcelable {
     private String id;
     private String username;
@@ -13,25 +16,37 @@ public class User implements Parcelable {
     private String address;
     private String imageProfile;
     private int type;
+    private int grade;
+    private List<ExamStudent> exams;
 
     public User() {
+        this(null, null, null, null, null, null, null, null, 0, 0);
     }
 
     public User(String id) {
-        this.id = id;
+        this(id, null, null, null, null, null, null, null, 0, 0);
     }
 
     public User(String username, String password) {
-        this.username = username;
-        this.email = username;
-        this.password = password;
+        this(null, username, password, null, null, username, null, null, 0, 0);
     }
 
     public User(String username, String password, String fullName, String phone) {
+        this(null, username, password, fullName, phone, username, null, null, 0, 0);
+    }
+
+    public User(String id, String username, String password, String fullName, String phone, String email, String address, String imageProfile, int type, int grade) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.fullName = fullName;
         this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.imageProfile = imageProfile;
+        this.type = type;
+        this.grade = grade;
+        this.exams = new ArrayList<>();
     }
 
     public String getId() {
@@ -106,6 +121,22 @@ public class User implements Parcelable {
         this.email = email;
     }
 
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setExams(List<ExamStudent> exams) {
+        this.exams = exams;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
+    public List<ExamStudent> getExams() {
+        return exams;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -126,10 +157,12 @@ public class User implements Parcelable {
         dest.writeString(this.password);
         dest.writeString(this.fullName);
         dest.writeString(this.phone);
+        dest.writeString(this.email);
         dest.writeString(this.address);
         dest.writeString(this.imageProfile);
         dest.writeInt(this.type);
-        dest.writeString(this.email);
+        dest.writeInt(this.grade);
+        dest.writeList(this.exams);
     }
 
     public void readFromParcel(Parcel source) {
@@ -138,10 +171,13 @@ public class User implements Parcelable {
         this.password = source.readString();
         this.fullName = source.readString();
         this.phone = source.readString();
+        this.email = source.readString();
         this.address = source.readString();
         this.imageProfile = source.readString();
         this.type = source.readInt();
-        this.email = source.readString();
+        this.grade = source.readInt();
+        this.exams = new ArrayList<>();
+        source.readList(this.exams, ExamStudent.class.getClassLoader());
     }
 
     protected User(Parcel in) {
@@ -150,10 +186,13 @@ public class User implements Parcelable {
         this.password = in.readString();
         this.fullName = in.readString();
         this.phone = in.readString();
+        this.email = in.readString();
         this.address = in.readString();
         this.imageProfile = in.readString();
         this.type = in.readInt();
-        this.email = in.readString();
+        this.grade = in.readInt();
+        this.exams = new ArrayList<>();
+        in.readList(this.exams, ExamStudent.class.getClassLoader());
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

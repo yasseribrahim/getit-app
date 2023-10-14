@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.getit.app.databinding.ActivitySplashBinding;
 import com.getit.app.utilities.helpers.LocaleHelper;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SplashActivity extends BaseActivity {
     private static final int SPLASH_DELAY_MILLIS = 2000;

@@ -38,7 +38,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         holder.binding.name.setText(user.getFullName());
         holder.binding.username.setText(user.getUsername());
         holder.binding.phone.setText(user.getPhone());
-        holder.binding.btnDelete.setVisibility(StorageHelper.getCurrentUser() != null ? StorageHelper.getCurrentUser().getId().equalsIgnoreCase(user.getId()) ? View.GONE : View.VISIBLE : View.GONE);
+        holder.binding.containerRemove.setVisibility(StorageHelper.getCurrentUser() != null ? StorageHelper.getCurrentUser().getId().equalsIgnoreCase(user.getId()) ? View.GONE : View.VISIBLE : View.GONE);
         if (user.getAddress() != null) {
             holder.binding.address.setText(user.getAddress());
         } else {
@@ -70,10 +70,16 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                     if (listener != null) listener.onItemViewListener(getAdapterPosition());
                 }
             });
-            binding.btnDelete.setOnClickListener(new View.OnClickListener() {
+            binding.containerRemove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (listener != null) listener.onDeleteItemViewListener(getAdapterPosition());
+                }
+            });
+            binding.containerEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) listener.onItemEditListener(getAdapterPosition());
                 }
             });
         }
@@ -81,6 +87,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
     public interface OnItemClickListener {
         void onItemViewListener(int position);
+
+        void onItemEditListener(int position);
 
         void onDeleteItemViewListener(int position);
     }

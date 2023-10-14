@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.getit.app.Constants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.getit.app.databinding.FragmentMoreBinding;
 import com.getit.app.CustomApplication;
@@ -23,6 +24,13 @@ import java.util.Locale;
 
 public class MoreFragment extends Fragment {
     private FragmentMoreBinding binding;
+
+    public static MoreFragment newInstance() {
+        Bundle args = new Bundle();
+        MoreFragment fragment = new MoreFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 

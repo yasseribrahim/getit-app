@@ -2,6 +2,9 @@ package com.getit.app.persenters.user;
 
 import androidx.annotation.NonNull;
 
+import com.getit.app.Constants;
+import com.getit.app.models.User;
+import com.getit.app.persenters.BasePresenter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -11,9 +14,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.getit.app.Constants;
-import com.getit.app.models.User;
-import com.getit.app.persenters.BasePresenter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +30,29 @@ public class UsersPresenter implements BasePresenter {
         this.callback = callback;
     }
 
+    public void getUsersCount() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                long teacherCount = 0, studentCount = 0;
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    User user = dataSnapshot.getValue(User.class);
+                    if (user.getType() == Constants.USER_TYPE_TEACHER) {
+                        teacherCount++;
+                    } else if (user.getType() == Constants.USER_TYPE_STUDENT) {
+                        studentCount++;
+                    }
+                }
+                callback.onGetUsersCountComplete(teacherCount, studentCount);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     public void signup(User user) {
         if (callback != null) {
             callback.onShowLoading();
@@ -43,11 +66,11 @@ public class UsersPresenter implements BasePresenter {
                     save(user);
 
                     if (callback != null) {
-                        callback.onGetSignupUserComplete();
+                        callback.onSignupUserComplete();
                     }
                 } else {
                     if (callback != null) {
-                        callback.onGetSignupUserFail(task.getException().getMessage());
+                        callback.onSignupUserFail(task.getException().getMessage());
                     }
                 }
                 if (callback != null) {

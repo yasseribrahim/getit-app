@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Quizzes</string>
+    <string name="app_name">GetIt</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -10,6 +10,9 @@
     <string name="menu_home">Home</string>
     <string name="menu_teachers">Teachers</string>
     <string name="menu_students">Students</string>
+    <string name="menu_courses">Courses</string>
+    <string name="menu_exams">Exams</string>
+    <string name="menu_questions">Questions</string>
     <string name="menu_more">More</string>
 
     <string name="str_save">Save</string>
@@ -23,6 +26,7 @@
     <string name="str_message_updated_successfully">Updated Successfully</string>
     <string name="str_message_delete_successfully">Deleted Successfully</string>
 
+    <string name="str_title_add_update">Add / Update</string>
     <string name="str_chat_edit_text_hint">Enter your message</string>
     <string name="str_loading">Loading...</string>
     <string name="str_empty_data">Not Found Data</string>
@@ -42,6 +46,7 @@
     <string name="str_phone_invalid">Phone Invalid</string>
     <string name="str_address_invalid">Address Invalid</string>
     <string name="str_signup_fail">SignUp Fail: %s</string>
+    <string name="str_save_fail">Save Fail: %s</string>
     <string name="str_invalid_username_or_password">Invalid username or password</string>
     <string name="str_login_successful">Login Successful</string>
     <string name="str_username_invalid">Invalid Username</string>
@@ -52,6 +57,7 @@
     <string name="str_full_name">Full Name</string>
     <string name="str_phone">Phone</string>
     <string name="str_address">Address</string>
+    <string name="str_grade">Grade</string>
     <string name="str_username_hint" translatable="false">user@example.com</string>
     <string name="str_password_hint">Enter your password</string>
     <string name="str_default_password" translatable="false">12345678</string>
@@ -81,4 +87,11 @@
     <string name="str_change_avatar"><u>Change Avatar</u></string>
     <string name="str_account_info">Account Info</string>
     <string name="str_account_info_edit">Edit Account Info</string>
+
+    <string name="str_question_type_multi_choices">Multi Choices</string>
+    <string name="str_question_type_text">Text</string>
+    <string name="str_grade_1">Grade One</string>
+    <string name="str_grade_2">Grade Two</string>
+    <string name="str_grade_3">Grade Three</string>
+    <string name="str_grade_4">Grade Four</string>
 </resources>

@@ -42,6 +42,30 @@ public class UIUtils {
         return "N/A";
     }
 
+    public static String getGrade(int grade) {
+        switch (grade) {
+            case Constants.GRADE_ONE:
+                return CustomApplication.getApplication().getApplicationContext().getString(R.string.str_grade_1);
+            case Constants.GRADE_TWO:
+                return CustomApplication.getApplication().getApplicationContext().getString(R.string.str_grade_2);
+            case Constants.GRADE_THREE:
+                return CustomApplication.getApplication().getApplicationContext().getString(R.string.str_grade_3);
+            case Constants.GRADE_FOUR:
+                return CustomApplication.getApplication().getApplicationContext().getString(R.string.str_grade_4);
+        }
+        return "N/A";
+    }
+
+    public static String getQuestionType(int type) {
+        switch (type) {
+            case Constants.QUESTION_TYPE_MULTI_CHOICE:
+                return CustomApplication.getApplication().getApplicationContext().getString(R.string.str_question_type_multi_choices);
+            case Constants.QUESTION_TYPE_TEXT:
+                return CustomApplication.getApplication().getApplicationContext().getString(R.string.str_question_type_text);
+        }
+        return "N/A";
+    }
+
     public static Drawable getRandomColorCircleDrawable() {
         return getColoredCircleDrawable(getRandomCircleColor());
     }
