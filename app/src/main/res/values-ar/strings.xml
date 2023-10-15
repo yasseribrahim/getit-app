@@ -16,6 +16,9 @@
     <string name="menu_questions">سؤال</string>
     <string name="menu_more">المزيد</string>
 
+    <string name="str_course">دورة</string>
+    <string name="str_name">Name</string>
+
     <string name="str_save">حفظ</string>
     <string name="str_enter_value">أدخل القيمة</string>
     <string name="str_invalid_entered_value">القيمة غير صالحة أو موجودة بالفعل</string>
@@ -43,8 +46,10 @@
     <string name="str_password_length_invalid">كلمة المرور ذات طول غير صالح، يجب أن تتكون كلمة المرور من 6 أرقام على الأقل</string>
     <string name="str_password_confirm_invalid">تأكيد كلمة المرور غير صالحة</string>
     <string name="str_full_name_invalid">الاسم الكامل غير صالح</string>
+    <string name="str_name_invalid">الاسم غير صالح</string>
     <string name="str_phone_invalid">الهاتف غير صالح</string>
     <string name="str_address_invalid">العنوان غير صالح</string>
+    <string name="str_grade_invalid">اختر الصف</string>
     <string name="str_signup_fail">فشل التسجيل: %s</string>
     <string name="str_save_fail">فشل الحفط: %s</string>
     <string name="str_invalid_username_or_password">اسم المستخدم أو كلمة المرور غير صالحة</string>
@@ -63,6 +68,7 @@
     <string name="str_default_password" translatable="false">12345678</string>
     <string name="str_password_confirm_hint">أدخل تأكيد كلمة المرور</string>
     <string name="str_full_name_hint">أدخل الاسم الكامل</string>
+    <string name="str_name_hint">أدخل الاسم</string>
     <string name="str_phone_hint">أدخل الهاتف</string>
     <string name="str_address_hint">أدخل العنوان</string>
     <string name="str_email">البريد الإلكتروني</string>

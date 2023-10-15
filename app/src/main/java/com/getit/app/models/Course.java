@@ -1,10 +1,13 @@
 package com.getit.app.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
-public class Course {
+public class Course implements Parcelable {
     private String id;
     private String name;
     private int grade;
@@ -74,4 +77,45 @@ public class Course {
                 ", createdAt=" + createdAt +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.name);
+        dest.writeInt(this.grade);
+        dest.writeLong(this.createdAt != null ? this.createdAt.getTime() : -1);
+    }
+
+    public void readFromParcel(Parcel source) {
+        this.id = source.readString();
+        this.name = source.readString();
+        this.grade = source.readInt();
+        long tmpCreatedAt = source.readLong();
+        this.createdAt = tmpCreatedAt == -1 ? null : new Date(tmpCreatedAt);
+    }
+
+    protected Course(Parcel in) {
+        this.id = in.readString();
+        this.name = in.readString();
+        this.grade = in.readInt();
+        long tmpCreatedAt = in.readLong();
+        this.createdAt = tmpCreatedAt == -1 ? null : new Date(tmpCreatedAt);
+    }
+
+    public static final Parcelable.Creator<Course> CREATOR = new Parcelable.Creator<Course>() {
+        @Override
+        public Course createFromParcel(Parcel source) {
+            return new Course(source);
+        }
+
+        @Override
+        public Course[] newArray(int size) {
+            return new Course[size];
+        }
+    };
 }

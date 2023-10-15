@@ -15,40 +15,37 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.getit.app.R;
-import com.getit.app.databinding.FragmentUsersBinding;
 import com.getit.app.Constants;
-import com.getit.app.models.User;
-import com.getit.app.persenters.user.UsersCallback;
-import com.getit.app.persenters.user.UsersPresenter;
+import com.getit.app.R;
+import com.getit.app.databinding.FragmentCoursesBinding;
+import com.getit.app.models.Course;
+import com.getit.app.persenters.courses.CoursesCallback;
+import com.getit.app.persenters.courses.CoursesPresenter;
+import com.getit.app.ui.activities.CourseActivity;
 import com.getit.app.ui.activities.UserActivity;
-import com.getit.app.ui.adptres.UsersAdapter;
-import com.getit.app.utilities.helpers.StorageHelper;
+import com.getit.app.ui.adptres.CoursesAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsersFragment extends Fragment implements UsersCallback, UsersAdapter.OnItemClickListener {
-    private FragmentUsersBinding binding;
-    private UsersPresenter presenter;
-    private UsersAdapter usersAdapter;
-    private List<User> users, searchedUsers;
-    protected int userType;
+public class CoursesFragment extends Fragment implements CoursesCallback, CoursesAdapter.OnItemClickListener {
+    private FragmentCoursesBinding binding;
+    private CoursesPresenter presenter;
+    private CoursesAdapter coursesAdapter;
+    private List<Course> courses, searchedCourses;
 
-    public static UsersFragment newInstance(int userType) {
+    public static CoursesFragment newInstance() {
         Bundle args = new Bundle();
-        args.putInt(Constants.ARG_ID, userType);
-        UsersFragment fragment = new UsersFragment();
+        CoursesFragment fragment = new CoursesFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentUsersBinding.inflate(inflater);
+        binding = FragmentCoursesBinding.inflate(inflater);
 
-        presenter = new UsersPresenter(this);
-        userType = getArguments().getInt(Constants.ARG_ID);
+        presenter = new CoursesPresenter(this);
 
         binding.refreshLayout.setColorSchemeResources(R.color.refreshColor1, R.color.refreshColor2, R.color.refreshColor3, R.color.refreshColor4);
         binding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -61,7 +58,7 @@ public class UsersFragment extends Fragment implements UsersCallback, UsersAdapt
         binding.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openUserActivity(null);
+                openCourseActivity(null);
             }
         });
 
@@ -82,17 +79,17 @@ public class UsersFragment extends Fragment implements UsersCallback, UsersAdapt
             }
         });
 
-        users = new ArrayList<>();
-        searchedUsers = new ArrayList<>();
+        courses = new ArrayList<>();
+        searchedCourses = new ArrayList<>();
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        usersAdapter = new UsersAdapter(searchedUsers, this);
-        binding.recyclerView.setAdapter(usersAdapter);
+        coursesAdapter = new CoursesAdapter(searchedCourses, this);
+        binding.recyclerView.setAdapter(coursesAdapter);
 
         return binding.getRoot();
     }
 
     private void load() {
-        presenter.getUsers(userType);
+        presenter.getCourses();
     }
 
     @Override
@@ -110,9 +107,9 @@ public class UsersFragment extends Fragment implements UsersCallback, UsersAdapt
     }
 
     @Override
-    public void onGetUsersComplete(List<User> users) {
-        this.users.clear();
-        this.users.addAll(users);
+    public void onGetCoursesComplete(List<Course> courses) {
+        this.courses.clear();
+        this.courses.addAll(courses);
         search(binding.textSearch.getText().toString());
     }
 
@@ -132,79 +129,77 @@ public class UsersFragment extends Fragment implements UsersCallback, UsersAdapt
     }
 
     private void search(String searchedText) {
-        searchedUsers.clear();
+        searchedCourses.clear();
         if (!searchedText.isEmpty()) {
-            for (User user : users) {
-                if (isMatched(user, searchedText)) {
-                    searchedUsers.add(user);
+            for (Course course : courses) {
+                if (isMatched(course, searchedText)) {
+                    searchedCourses.add(course);
                 }
             }
         } else {
-            searchedUsers.addAll(users);
+            searchedCourses.addAll(courses);
         }
 
         refresh();
     }
 
-    private boolean isMatched(User user, String text) {
+    private boolean isMatched(Course course, String text) {
         String searchedText = text.toLowerCase();
-        boolean result = user.getFullName().toLowerCase().contains(searchedText) ||
-                (user.getAddress() != null && user.getAddress().toLowerCase().contains(searchedText)) ||
-                (user.getPhone() != null && user.getPhone().toLowerCase().contains(searchedText)) ||
-                (user.getUsername() != null && user.getUsername().toLowerCase().contains(searchedText));
+        int grade = 0;
+        try {
+            grade = Integer.parseInt(searchedText);
+        } catch (Exception ex) {
+        }
+        boolean result = course.getName().toLowerCase().contains(searchedText) || (course.getGrade() == grade);
         return result;
     }
 
     private void refresh() {
         binding.message.setVisibility(View.GONE);
-        if (searchedUsers.isEmpty()) {
+        if (searchedCourses.isEmpty()) {
             binding.message.setVisibility(View.VISIBLE);
         }
 
-        usersAdapter.notifyDataSetChanged();
+        coursesAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onItemViewListener(int position) {
-        User user = searchedUsers.get(position);
+        Course course = searchedCourses.get(position);
     }
 
     @Override
     public void onDeleteItemViewListener(int position) {
-        if (position >= 0 && position < searchedUsers.size()) {
-            User user = searchedUsers.get(position);
-            int index = users.indexOf(user);
-            searchedUsers.remove(position);
-            if (index >= 0 && index < users.size()) {
-                users.remove(position);
+        if (position >= 0 && position < searchedCourses.size()) {
+            Course course = searchedCourses.get(position);
+            int index = courses.indexOf(course);
+            searchedCourses.remove(position);
+            if (index >= 0 && index < courses.size()) {
+                courses.remove(position);
             }
 
-            presenter.save(user);
-            onDeleteUserComplete(position);
+            presenter.save(course);
+//            onDeleteUserComplete(position);
         }
     }
 
     @Override
     public void onItemEditListener(int position) {
-        if (position >= 0 && position < searchedUsers.size()) {
-            User user = searchedUsers.get(position);
-            openUserActivity(user);
+        if (position >= 0 && position < searchedCourses.size()) {
+            Course course = searchedCourses.get(position);
+            openCourseActivity(course);
         }
     }
 
     @Override
-    public void onDeleteUserComplete(int position) {
+    public void onDeleteCourseComplete(int position) {
         Toast.makeText(getContext(), R.string.str_message_delete_successfully, Toast.LENGTH_LONG).show();
-        usersAdapter.notifyItemRemoved(position);
+        coursesAdapter.notifyItemRemoved(position);
     }
 
-    private void openUserActivity(User user) {
-        Intent intent = new Intent(getContext(), UserActivity.class);
-        if (user == null) {
-            intent.putExtra(Constants.ARG_ID, userType);
-        } else {
-            intent.putExtra(Constants.ARG_OBJECT, user);
-        }
+    private void openCourseActivity(Course course) {
+        Intent intent = new Intent(getContext(), CourseActivity.class);
+        intent.putExtra(Constants.ARG_OBJECT, course);
         startActivity(intent);
     }
 }

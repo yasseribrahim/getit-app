@@ -15,6 +15,9 @@
     <string name="menu_questions">Questions</string>
     <string name="menu_more">More</string>
 
+    <string name="str_course">Course</string>
+    <string name="str_name">Name</string>
+
     <string name="str_save">Save</string>
     <string name="str_enter_value">Enter Value</string>
     <string name="str_invalid_entered_value">Value invalid or already exist</string>
@@ -43,8 +46,10 @@
     <string name="str_password_length_invalid">Password Invalid Length, Password Must Be At Least 6 Digits</string>
     <string name="str_password_confirm_invalid">Confirm Password Invalid</string>
     <string name="str_full_name_invalid">Full Name Invalid</string>
+    <string name="str_name_invalid">Name Invalid</string>
     <string name="str_phone_invalid">Phone Invalid</string>
     <string name="str_address_invalid">Address Invalid</string>
+    <string name="str_grade_invalid">Grade Invalid</string>
     <string name="str_signup_fail">SignUp Fail: %s</string>
     <string name="str_save_fail">Save Fail: %s</string>
     <string name="str_invalid_username_or_password">Invalid username or password</string>
@@ -63,6 +68,7 @@
     <string name="str_default_password" translatable="false">12345678</string>
     <string name="str_password_confirm_hint">Enter Password Confirm</string>
     <string name="str_full_name_hint">Enter Full Name</string>
+    <string name="str_name_hint">Enter Name</string>
     <string name="str_phone_hint">Enter Phone</string>
     <string name="str_address_hint">Enter Address</string>
     <string name="str_email">Email</string>

@@ -90,6 +90,11 @@ public class UserActivity extends BaseActivity implements UsersCallback, GradeSe
                     binding.address.requestFocus();
                     return;
                 }
+                if (user.getGrade() <= 0) {
+                    binding.grade.setError(getString(R.string.str_grade_invalid));
+                    binding.grade.requestFocus();
+                    return;
+                }
 
                 user.setUsername(username);
                 user.setPassword(password);

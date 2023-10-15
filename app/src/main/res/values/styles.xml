@@ -155,6 +155,13 @@
         <item name="android:paddingEnd">8dp</item>
     </style>
 
+    <style name="ListItem">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?android:attr/listPreferredItemHeight</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
     <style name="CardInfoPhotoStyle">
         <item name="android:layout_width">65dp</item>
         <item name="android:layout_height">65dp</item>
