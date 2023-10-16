@@ -132,6 +132,24 @@ public class CoursesPresenter implements BasePresenter {
         reference.addListenerForSingleValueEvent(listener);
     }
 
+    public void delete(Course course) {
+        reference.child(course.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                if (callback != null) {
+                    callback.onDeleteCourseComplete(course);
+                    callback.onHideLoading();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onFailure(e.getMessage(), null);
+                callback.onHideLoading();
+            }
+        });
+    }
+
     public void getCourseById(String id) {
         callback.onShowLoading();
         reference.child(id).addListenerForSingleValueEvent(new ValueEventListener() {

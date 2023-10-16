@@ -14,7 +14,7 @@ public interface CoursesCallback extends BaseCallback {
     default void onSaveCourseComplete() {
     }
 
-    default void onDeleteCourseComplete(int position) {
+    default void onDeleteCourseComplete(Course course) {
     }
 
     default void onGetCourseComplete(Course course) {

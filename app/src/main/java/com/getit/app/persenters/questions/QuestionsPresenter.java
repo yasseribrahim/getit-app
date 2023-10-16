@@ -3,6 +3,7 @@ package com.getit.app.persenters.questions;
 import androidx.annotation.NonNull;
 
 import com.getit.app.Constants;
+import com.getit.app.models.Course;
 import com.getit.app.models.Question;
 import com.getit.app.models.User;
 import com.getit.app.persenters.BasePresenter;
@@ -145,6 +146,24 @@ public class QuestionsPresenter implements BasePresenter {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                callback.onHideLoading();
+            }
+        });
+    }
+
+    public void delete(Question question) {
+        reference.child(question.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                if (callback != null) {
+                    callback.onDeleteQuestionComplete(question);
+                    callback.onHideLoading();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onFailure(e.getMessage(), null);
                 callback.onHideLoading();
             }
         });

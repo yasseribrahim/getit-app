@@ -113,6 +113,24 @@ public class ExamsPresenter implements BasePresenter {
         });
     }
 
+    public void delete(Exam exam) {
+        reference.child(exam.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                if (callback != null) {
+                    callback.onDeleteExamComplete(exam);
+                    callback.onHideLoading();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onFailure(e.getMessage(), null);
+                callback.onHideLoading();
+            }
+        });
+    }
+
     @Override
     public void onDestroy() {
         if (reference != null && listener != null) {

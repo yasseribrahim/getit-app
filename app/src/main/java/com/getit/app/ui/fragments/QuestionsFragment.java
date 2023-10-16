@@ -30,7 +30,7 @@ import java.util.List;
 public class QuestionsFragment extends Fragment implements QuestionsCallback, QuestionsAdapter.OnQuestionsClickListener {
     private FragmentQuestonsBinding binding;
     private QuestionsPresenter presenter;
-    private QuestionsAdapter usersAdapter;
+    private QuestionsAdapter adapter;
     private List<Question> questions, searchedQuestions;
 
     public static QuestionsFragment newInstance() {
@@ -81,8 +81,8 @@ public class QuestionsFragment extends Fragment implements QuestionsCallback, Qu
         questions = new ArrayList<>();
         searchedQuestions = new ArrayList<>();
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        usersAdapter = new QuestionsAdapter(searchedQuestions, this);
-        binding.recyclerView.setAdapter(usersAdapter);
+        adapter = new QuestionsAdapter(searchedQuestions, this);
+        binding.recyclerView.setAdapter(adapter);
 
         return binding.getRoot();
     }
@@ -156,7 +156,7 @@ public class QuestionsFragment extends Fragment implements QuestionsCallback, Qu
             binding.message.setVisibility(View.VISIBLE);
         }
 
-        usersAdapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -167,15 +167,14 @@ public class QuestionsFragment extends Fragment implements QuestionsCallback, Qu
     @Override
     public void onQuestionDeleteListener(int position) {
         if (position >= 0 && position < searchedQuestions.size()) {
-            Question user = searchedQuestions.get(position);
-            int index = questions.indexOf(user);
+            Question question = searchedQuestions.get(position);
+            int index = questions.indexOf(question);
             searchedQuestions.remove(position);
             if (index >= 0 && index < questions.size()) {
                 questions.remove(position);
             }
 
-            presenter.save(user);
-            onDeleteQuestionComplete(position);
+            presenter.delete(question);
         }
     }
 
@@ -188,9 +187,12 @@ public class QuestionsFragment extends Fragment implements QuestionsCallback, Qu
     }
 
     @Override
-    public void onDeleteQuestionComplete(int position) {
+    public void onDeleteQuestionComplete(Question question) {
+        int index = searchedQuestions.indexOf(question);
+        if(index != -1) {
+            adapter.notifyItemRemoved(index);
+        }
         Toast.makeText(getContext(), R.string.str_message_delete_successfully, Toast.LENGTH_LONG).show();
-        usersAdapter.notifyItemRemoved(position);
     }
 
     private void openQuestionActivity(Question question) {

@@ -3,9 +3,12 @@ package com.getit.app.persenters.user;
 import androidx.annotation.NonNull;
 
 import com.getit.app.Constants;
+import com.getit.app.models.Question;
 import com.getit.app.models.User;
 import com.getit.app.persenters.BasePresenter;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -141,6 +144,24 @@ public class UsersPresenter implements BasePresenter {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                callback.onHideLoading();
+            }
+        });
+    }
+
+    public void delete(User user) {
+        reference.child(user.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                if (callback != null) {
+                    callback.onDeleteUserComplete(user);
+                    callback.onHideLoading();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onFailure(e.getMessage(), null);
                 callback.onHideLoading();
             }
         });

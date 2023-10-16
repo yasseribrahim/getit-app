@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.getit.app.R;
 import com.getit.app.databinding.FragmentUsersBinding;
 import com.getit.app.Constants;
+import com.getit.app.models.Question;
 import com.getit.app.models.User;
 import com.getit.app.persenters.user.UsersCallback;
 import com.getit.app.persenters.user.UsersPresenter;
@@ -179,8 +180,7 @@ public class UsersFragment extends Fragment implements UsersCallback, UsersAdapt
                 users.remove(position);
             }
 
-            presenter.save(user);
-            onDeleteUserComplete(position);
+            presenter.delete(user);
         }
     }
 
@@ -193,9 +193,12 @@ public class UsersFragment extends Fragment implements UsersCallback, UsersAdapt
     }
 
     @Override
-    public void onDeleteUserComplete(int position) {
+    public void onDeleteUserComplete(User user) {
+        int index = searchedUsers.indexOf(user);
+        if(index != -1) {
+            usersAdapter.notifyItemRemoved(index);
+        }
         Toast.makeText(getContext(), R.string.str_message_delete_successfully, Toast.LENGTH_LONG).show();
-        usersAdapter.notifyItemRemoved(position);
     }
 
     private void openUserActivity(User user) {

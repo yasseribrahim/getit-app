@@ -14,7 +14,7 @@ public interface UsersCallback extends BaseCallback {
     default void onGetUsersCountComplete(long teacherCount, long studentCount) {
     }
 
-    default void onDeleteUserComplete(int position) {
+    default void onDeleteUserComplete(User user) {
     }
 
     default void onSignupUserComplete() {

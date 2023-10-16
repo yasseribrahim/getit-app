@@ -22,7 +22,6 @@ import com.getit.app.models.Course;
 import com.getit.app.persenters.courses.CoursesCallback;
 import com.getit.app.persenters.courses.CoursesPresenter;
 import com.getit.app.ui.activities.CourseActivity;
-import com.getit.app.ui.activities.UserActivity;
 import com.getit.app.ui.adptres.CoursesAdapter;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ import java.util.List;
 public class CoursesFragment extends Fragment implements CoursesCallback, CoursesAdapter.OnItemClickListener {
     private FragmentCoursesBinding binding;
     private CoursesPresenter presenter;
-    private CoursesAdapter coursesAdapter;
+    private CoursesAdapter adapter;
     private List<Course> courses, searchedCourses;
 
     public static CoursesFragment newInstance() {
@@ -82,8 +81,8 @@ public class CoursesFragment extends Fragment implements CoursesCallback, Course
         courses = new ArrayList<>();
         searchedCourses = new ArrayList<>();
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        coursesAdapter = new CoursesAdapter(searchedCourses, this);
-        binding.recyclerView.setAdapter(coursesAdapter);
+        adapter = new CoursesAdapter(searchedCourses, this);
+        binding.recyclerView.setAdapter(adapter);
 
         return binding.getRoot();
     }
@@ -160,7 +159,7 @@ public class CoursesFragment extends Fragment implements CoursesCallback, Course
             binding.message.setVisibility(View.VISIBLE);
         }
 
-        coursesAdapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -178,8 +177,7 @@ public class CoursesFragment extends Fragment implements CoursesCallback, Course
                 courses.remove(position);
             }
 
-            presenter.save(course);
-//            onDeleteUserComplete(position);
+            presenter.delete(course);
         }
     }
 
@@ -192,9 +190,12 @@ public class CoursesFragment extends Fragment implements CoursesCallback, Course
     }
 
     @Override
-    public void onDeleteCourseComplete(int position) {
+    public void onDeleteCourseComplete(Course course) {
+        int index = searchedCourses.indexOf(course);
+        if(index != -1) {
+            adapter.notifyItemRemoved(index);
+        }
         Toast.makeText(getContext(), R.string.str_message_delete_successfully, Toast.LENGTH_LONG).show();
-        coursesAdapter.notifyItemRemoved(position);
     }
 
     private void openCourseActivity(Course course) {

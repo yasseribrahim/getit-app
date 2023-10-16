@@ -14,7 +14,7 @@ public interface QuestionsCallback extends BaseCallback {
     default void onSaveQuestionComplete() {
     }
 
-    default void onDeleteQuestionComplete(int position) {
+    default void onDeleteQuestionComplete(Question question) {
     }
 
     default void onGetQuestionComplete(Question question) {
