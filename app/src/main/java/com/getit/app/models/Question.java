@@ -1,5 +1,8 @@
 package com.getit.app.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.getit.app.Constants;
 
 import java.util.ArrayList;
@@ -7,9 +10,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class Question {
+public class Question implements Parcelable {
     private String id;
     private String courseId;
+    private String courseName;
     private String title;
     private String description;
     private int type;
@@ -48,6 +52,14 @@ public class Question {
         this.courseId = courseId;
     }
 
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -80,7 +92,7 @@ public class Question {
         this.choices = choices;
     }
 
-    public boolean isMultiQuestion() {
+    public boolean isMultiChoices() {
         return type == Constants.QUESTION_TYPE_MULTI_CHOICE;
     }
 
@@ -102,10 +114,61 @@ public class Question {
         return "Question{" +
                 "id='" + id + '\'' +
                 ", courseId='" + courseId + '\'' +
+                ", courseName='" + courseName + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", type=" + type +
                 ", choices=" + choices +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.courseId);
+        dest.writeString(this.courseName);
+        dest.writeString(this.title);
+        dest.writeString(this.description);
+        dest.writeInt(this.type);
+        dest.writeList(this.choices);
+    }
+
+    public void readFromParcel(Parcel source) {
+        this.id = source.readString();
+        this.courseId = source.readString();
+        this.courseName = source.readString();
+        this.title = source.readString();
+        this.description = source.readString();
+        this.type = source.readInt();
+        this.choices = new ArrayList<QuestionChoice>();
+        source.readList(this.choices, QuestionChoice.class.getClassLoader());
+    }
+
+    protected Question(Parcel in) {
+        this.id = in.readString();
+        this.courseId = in.readString();
+        this.courseName = in.readString();
+        this.title = in.readString();
+        this.description = in.readString();
+        this.type = in.readInt();
+        this.choices = new ArrayList<QuestionChoice>();
+        in.readList(this.choices, QuestionChoice.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Question> CREATOR = new Parcelable.Creator<Question>() {
+        @Override
+        public Question createFromParcel(Parcel source) {
+            return new Question(source);
+        }
+
+        @Override
+        public Question[] newArray(int size) {
+            return new Question[size];
+        }
+    };
 }

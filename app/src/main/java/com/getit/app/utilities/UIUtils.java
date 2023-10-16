@@ -60,8 +60,8 @@ public class UIUtils {
         switch (type) {
             case Constants.QUESTION_TYPE_MULTI_CHOICE:
                 return CustomApplication.getApplication().getApplicationContext().getString(R.string.str_question_type_multi_choices);
-            case Constants.QUESTION_TYPE_TEXT:
-                return CustomApplication.getApplication().getApplicationContext().getString(R.string.str_question_type_text);
+            case Constants.QUESTION_TYPE_ARTICLE:
+                return CustomApplication.getApplication().getApplicationContext().getString(R.string.str_question_type_article);
         }
         return "N/A";
     }

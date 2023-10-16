@@ -51,7 +51,7 @@ public class Answer {
     }
     
     public void correct() {
-        if (question.isMultiQuestion()) {
+        if (question.isMultiChoices()) {
             if (selectedAnswerIndex >= 0 && selectedAnswerIndex < question.getChoices().size()) {
                 QuestionChoice rightChoice = question.getChoices().get(selectedAnswerIndex);
                 isRight = rightChoice.isCorrectAnswer();

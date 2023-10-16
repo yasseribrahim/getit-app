@@ -17,6 +17,7 @@
     <string name="menu_more">المزيد</string>
 
     <string name="str_course">دورة</string>
+    <string name="str_course_hint">اختر الدورة</string>
     <string name="str_name">Name</string>
 
     <string name="str_save">حفظ</string>
@@ -55,6 +56,16 @@
     <string name="str_invalid_username_or_password">اسم المستخدم أو كلمة المرور غير صالحة</string>
     <string name="str_login_successful">تم تسجيل الدخول بنجاح</string>
     <string name="str_username_invalid">اسم مستخدم غير صالح</string>
+
+    <string name="str_title_question">سؤال</string>
+    <string name="str_title">العنوان</string>
+    <string name="str_title_hint">أدخل العنوان</string>
+    <string name="str_description">الوصف</string>
+    <string name="str_description_hint">أدخل الوصف</string>
+    <string name="str_question_type">نوع السؤال</string>
+    <string name="str_question_type_hint">اختر نوع السؤال</string>
+    <string name="str_question_multi_choices">الاختيارات</string>
+    <string name="str_question_multi_choices_hint">ادخل الاختيارات</string>
 
     <string name="str_username">اسم المستخدم</string>
     <string name="str_password">كلمة المرور</string>
@@ -95,9 +106,14 @@
     <string name="str_account_info_edit">تحرير معلومات الحساب</string>
 
     <string name="str_question_type_multi_choices">الاختيارات المتعددة</string>
-    <string name="str_question_type_text">النص</string>
+    <string name="str_question_type_article">مقالى</string>
     <string name="str_grade_1">الصف الأول</string>
     <string name="str_grade_2">الصف الثاني</string>
     <string name="str_grade_3">الصف الثالث</string>
     <string name="str_grade_4">الصف الرابع</string>
+
+    <string name="str_grade_header">حدد الصف</string>
+    <string name="str_course_header">حدد الدورة</string>
+    <string name="str_choice_hint">أدخل الاختيار</string>
+    <string name="str_is_right_answer">الاجابة الصحيحة</string>
 </resources>

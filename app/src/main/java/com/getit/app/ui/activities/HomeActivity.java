@@ -21,6 +21,7 @@ import com.getit.app.models.User;
 import com.getit.app.ui.fragments.CoursesFragment;
 import com.getit.app.ui.fragments.HomeFragment;
 import com.getit.app.ui.fragments.MoreFragment;
+import com.getit.app.ui.fragments.QuestionsFragment;
 import com.getit.app.ui.fragments.UsersFragment;
 import com.getit.app.utilities.helpers.StorageHelper;
 import com.google.android.material.navigation.NavigationView;
@@ -67,6 +68,10 @@ public class HomeActivity extends AppCompatActivity {
                                 case R.id.nav_courses:
                                     showFragment(CoursesFragment.newInstance(), R.id.container);
                                     binding.content.toolbar.setTitle(R.string.menu_courses);
+                                    break;
+                                case R.id.nav_questions:
+                                    showFragment(QuestionsFragment.newInstance(), R.id.container);
+                                    binding.content.toolbar.setTitle(R.string.menu_questions);
                                     break;
                                 case R.id.nav_more:
                                     showFragment(MoreFragment.newInstance(), R.id.container);

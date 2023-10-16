@@ -3,8 +3,11 @@ package com.getit.app.persenters.exams;
 import androidx.annotation.NonNull;
 
 import com.getit.app.Constants;
+import com.getit.app.models.Course;
 import com.getit.app.models.Exam;
 import com.getit.app.persenters.BasePresenter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -12,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class ExamsPresenter implements BasePresenter {
@@ -37,15 +41,27 @@ public class ExamsPresenter implements BasePresenter {
         });
     }
 
-    public void save(Exam... exams) {
-        FirebaseDatabase dp = FirebaseDatabase.getInstance();
-        DatabaseReference node = dp.getReference(Constants.NODE_NAME_USERS);
-        for (Exam exam : exams) {
-            node.child(exam.getId()).setValue(exam);
+
+    public void save(Exam exam) {
+        callback.onHideLoading();
+        if (exam.getId() == null) {
+            exam.setId(Calendar.getInstance().getTimeInMillis() + "");
         }
-        if (callback != null) {
-            callback.onSaveExamComplete();
-        }
+        reference.child(exam.getId()).setValue(exam).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                if (callback != null) {
+                    callback.onSaveExamComplete();
+                    callback.onHideLoading();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onFailure(e.getMessage(), null);
+                callback.onHideLoading();
+            }
+        });
     }
 
     public void getExams(int grade) {

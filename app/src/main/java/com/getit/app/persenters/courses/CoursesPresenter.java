@@ -15,6 +15,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class CoursesPresenter implements BasePresenter {
@@ -76,6 +78,13 @@ public class CoursesPresenter implements BasePresenter {
                 }
 
                 if (callback != null) {
+                    Collections.sort(courses, new Comparator<Course>() {
+                        @Override
+                        public int compare(Course o1, Course o2) {
+                            return o1.getGrade() - o2.getGrade();
+                        }
+                    });
+
                     callback.onGetCoursesComplete(courses);
                     callback.onHideLoading();
                 }

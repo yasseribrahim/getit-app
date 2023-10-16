@@ -16,6 +16,7 @@
     <string name="menu_more">More</string>
 
     <string name="str_course">Course</string>
+    <string name="str_course_hint">Select Course</string>
     <string name="str_name">Name</string>
 
     <string name="str_save">Save</string>
@@ -56,6 +57,17 @@
     <string name="str_login_successful">Login Successful</string>
     <string name="str_username_invalid">Invalid Username</string>
 
+
+    <string name="str_title_question">Question</string>
+    <string name="str_title">Title</string>
+    <string name="str_title_hint">Enter Title</string>
+    <string name="str_description">Description</string>
+    <string name="str_description_hint">Enter Description</string>
+    <string name="str_question_type">Question Type</string>
+    <string name="str_question_type_hint">Select Question Type</string>
+    <string name="str_question_multi_choices">Choices</string>
+    <string name="str_question_multi_choices_hint">Fill Choices</string>
+
     <string name="str_username">Username</string>
     <string name="str_password">Password</string>
     <string name="str_password_confirm">Password Confirm</string>
@@ -95,9 +107,14 @@
     <string name="str_account_info_edit">Edit Account Info</string>
 
     <string name="str_question_type_multi_choices">Multi Choices</string>
-    <string name="str_question_type_text">Text</string>
+    <string name="str_question_type_article">Article</string>
     <string name="str_grade_1">Grade One</string>
     <string name="str_grade_2">Grade Two</string>
     <string name="str_grade_3">Grade Three</string>
     <string name="str_grade_4">Grade Four</string>
+
+    <string name="str_grade_header">Select Grade</string>
+    <string name="str_course_header">Select Course</string>
+    <string name="str_choice_hint">Enter Choice</string>
+    <string name="str_is_right_answer">Is Right</string>
 </resources>

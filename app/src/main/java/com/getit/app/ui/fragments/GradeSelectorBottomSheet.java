@@ -18,7 +18,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 public class GradeSelectorBottomSheet extends BottomSheetDialogFragment implements View.OnClickListener {
     private BottomSheetGradeSelectorBinding binding;
     private ItemClickListener listener;
-private int selectedGrade;
+    private int selectedGrade;
+
     public static GradeSelectorBottomSheet newInstance(int selectedGrade) {
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.ARG_ID, selectedGrade);
@@ -34,10 +35,14 @@ private int selectedGrade;
         binding = BottomSheetGradeSelectorBinding.inflate(inflater);
         selectedGrade = getArguments().getInt(Constants.ARG_ID, 0);
         switch (selectedGrade) {
-            case Constants.GRADE_ONE -> binding.txtGrade1.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorSecondary, null));
-            case Constants.GRADE_TWO -> binding.txtGrade2.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorSecondary, null));
-            case Constants.GRADE_THREE -> binding.txtGrade3.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorSecondary, null));
-            case Constants.GRADE_FOUR -> binding.txtGrade4.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorSecondary, null));
+            case Constants.GRADE_ONE ->
+                    binding.txtGrade1.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorSecondary, null));
+            case Constants.GRADE_TWO ->
+                    binding.txtGrade2.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorSecondary, null));
+            case Constants.GRADE_THREE ->
+                    binding.txtGrade3.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorSecondary, null));
+            case Constants.GRADE_FOUR ->
+                    binding.txtGrade4.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorSecondary, null));
         }
         return binding.getRoot();
     }
