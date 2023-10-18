@@ -20,6 +20,7 @@ import com.getit.app.utilities.ToastUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CourseSelectorBottomSheet extends BottomSheetDialogFragment implements CoursesCallback, CoursesSelectorAdapter.OnItemClickListener {
@@ -29,9 +30,12 @@ public class CourseSelectorBottomSheet extends BottomSheetDialogFragment impleme
     private CoursesSelectorAdapter adapter;
     private List<Course> courses;
     private String selectedCourse;
-    public static CourseSelectorBottomSheet newInstance(String selectedCourse) {
+    private int selectedGrade;
+
+    public static CourseSelectorBottomSheet newInstance(String selectedCourse, int selectedGrade) {
         Bundle bundle = new Bundle();
         bundle.putString(Constants.ARG_ID, selectedCourse);
+        bundle.putInt(Constants.ARG_ID_2, selectedGrade);
         CourseSelectorBottomSheet sheet = new CourseSelectorBottomSheet();
         sheet.setArguments(bundle);
         return sheet;
@@ -42,6 +46,7 @@ public class CourseSelectorBottomSheet extends BottomSheetDialogFragment impleme
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = BottomSheetCourseSelectorBinding.inflate(inflater);
         selectedCourse = getArguments().getString(Constants.ARG_ID);
+        selectedGrade = getArguments().getInt(Constants.ARG_ID_2, 0);
         presenter = new CoursesPresenter(this);
         return binding.getRoot();
     }
@@ -51,9 +56,13 @@ public class CourseSelectorBottomSheet extends BottomSheetDialogFragment impleme
         super.onViewCreated(view, savedInstanceState);
         courses = new ArrayList<>();
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new CoursesSelectorAdapter(courses, this, selectedCourse);
+        adapter = new CoursesSelectorAdapter(courses, this, Arrays.asList(new Course(selectedCourse)));
         binding.recyclerView.setAdapter(adapter);
-        presenter.getCourses();
+        if (selectedGrade > 0) {
+            presenter.getCourses(selectedGrade);
+        } else {
+            presenter.getCourses();
+        }
     }
 
     @Override

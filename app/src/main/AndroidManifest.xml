@@ -53,25 +53,31 @@
             android:theme="@style/FullScreenTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="com.getit.app.ui.activities.UserActivity"
+            android:name="com.getit.app.ui.activities.admin.UserActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/FullScreenTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="com.getit.app.ui.activities.CourseActivity"
+            android:name="com.getit.app.ui.activities.admin.CourseActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/FullScreenTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="com.getit.app.ui.activities.QuestionActivity"
+            android:name="com.getit.app.ui.activities.admin.QuestionActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/FullScreenTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="com.getit.app.ui.activities.HomeActivity"
+            android:name="com.getit.app.ui.activities.admin.ExamActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullScreenTheme"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name="com.getit.app.ui.activities.admin.HomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.ColoredStatusBar"

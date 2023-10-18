@@ -57,6 +57,19 @@
     <string name="str_login_successful">Login Successful</string>
     <string name="str_username_invalid">Invalid Username</string>
 
+    <string name="str_score_pass_formatted">Pass %s</string>
+    <string name="str_score_total_formatted">Total %s</string>
+    <string name="str_questions_formatted">Questions: %s</string>
+
+    <string name="str_title_exam">Exam</string>
+    <string name="str_total_score">Total Score</string>
+    <string name="str_total_score_hint">Enter Total Score</string>
+    <string name="str_pass_score">Pass Score</string>
+    <string name="str_pass_score_hint">Enter Pass Score</string>
+    <string name="str_is_active">Active</string>
+    <string name="str_questions_list">Questions</string>
+    <string name="str_questions_list_hint">Please Select List Of Questions</string>
+    <string name="str_question_list_empty">Please select Grade and Course firstly</string>
 
     <string name="str_title_question">Question</string>
     <string name="str_title">Title</string>
@@ -75,6 +88,7 @@
     <string name="str_phone">Phone</string>
     <string name="str_address">Address</string>
     <string name="str_grade">Grade</string>
+    <string name="str_grade_hint">Select Grade</string>
     <string name="str_username_hint" translatable="false">user@example.com</string>
     <string name="str_password_hint">Enter your password</string>
     <string name="str_default_password" translatable="false">12345678</string>

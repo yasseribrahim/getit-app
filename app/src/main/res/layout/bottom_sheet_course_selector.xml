@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="@string/str_grade_header"
+        android:text="@string/str_course_header"
         android:textColor="@color/black_light"
         android:textStyle="bold" />
 

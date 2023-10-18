@@ -23,4 +23,5 @@ public interface Constants {
 
     String ARG_OBJECT = "object";
     String ARG_ID = "id";
+    String ARG_ID_2 = "id-2";
 }

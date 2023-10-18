@@ -18,13 +18,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.getit.app.R;
 import com.getit.app.databinding.FragmentUsersBinding;
 import com.getit.app.Constants;
-import com.getit.app.models.Question;
 import com.getit.app.models.User;
 import com.getit.app.persenters.user.UsersCallback;
 import com.getit.app.persenters.user.UsersPresenter;
-import com.getit.app.ui.activities.UserActivity;
+import com.getit.app.ui.activities.admin.UserActivity;
 import com.getit.app.ui.adptres.UsersAdapter;
-import com.getit.app.utilities.helpers.StorageHelper;
 
 import java.util.ArrayList;
 import java.util.List;

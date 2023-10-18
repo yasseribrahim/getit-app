@@ -14,6 +14,11 @@ public class Course implements Parcelable {
     private Date createdAt;
 
     public Course() {
+        this(null, null, 0);
+    }
+
+    public Course(String id) {
+        this(id, null, 0);
     }
 
     public Course(String id, String name, int grade) {

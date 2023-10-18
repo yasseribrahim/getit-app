@@ -1,4 +1,4 @@
-package com.getit.app.ui.activities;
+package com.getit.app.ui.activities.admin;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import com.getit.app.databinding.ActivityUserBinding;
 import com.getit.app.models.User;
 import com.getit.app.persenters.user.UsersCallback;
 import com.getit.app.persenters.user.UsersPresenter;
+import com.getit.app.ui.activities.BaseActivity;
 import com.getit.app.ui.fragments.GradeSelectorBottomSheet;
 import com.getit.app.utilities.UIUtils;
 import com.getit.app.utilities.helpers.LocaleHelper;
@@ -134,7 +135,7 @@ public class UserActivity extends BaseActivity implements UsersCallback, GradeSe
     }
 
     @Override
-    public void onItemClick(int id) {
+    public void onGradeClick(int id) {
         user.setGrade(id);
         binding.grade.setText(UIUtils.getGrade(id));
     }

@@ -1,4 +1,4 @@
-package com.getit.app.ui.activities;
+package com.getit.app.ui.activities.admin;
 
 import android.icu.util.Calendar;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import com.getit.app.databinding.ActivityCourseBinding;
 import com.getit.app.models.Course;
 import com.getit.app.persenters.courses.CoursesCallback;
 import com.getit.app.persenters.courses.CoursesPresenter;
+import com.getit.app.ui.activities.BaseActivity;
 import com.getit.app.ui.fragments.GradeSelectorBottomSheet;
 import com.getit.app.utilities.UIUtils;
 import com.getit.app.utilities.helpers.LocaleHelper;
@@ -78,7 +79,7 @@ public class CourseActivity extends BaseActivity implements CoursesCallback, Gra
     }
 
     @Override
-    public void onItemClick(int id) {
+    public void onGradeClick(int id) {
         course.setGrade(id);
         binding.grade.setText(UIUtils.getGrade(id));
     }

@@ -1,4 +1,4 @@
-package com.getit.app.ui.activities;
+package com.getit.app.ui.activities.admin;
 
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +14,7 @@ import com.getit.app.models.Question;
 import com.getit.app.models.QuestionChoice;
 import com.getit.app.persenters.questions.QuestionsCallback;
 import com.getit.app.persenters.questions.QuestionsPresenter;
+import com.getit.app.ui.activities.BaseActivity;
 import com.getit.app.ui.fragments.CourseSelectorBottomSheet;
 import com.getit.app.utilities.ToastUtils;
 import com.getit.app.utilities.helpers.LocaleHelper;
@@ -44,7 +45,7 @@ public class QuestionActivity extends BaseActivity implements QuestionsCallback,
         binding.course.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CourseSelectorBottomSheet.newInstance(question.getCourseId()).show(getSupportFragmentManager(), "");
+                CourseSelectorBottomSheet.newInstance(question.getCourseId(), 0).show(getSupportFragmentManager(), "");
             }
         });
 

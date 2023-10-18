@@ -9,22 +9,22 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.getit.app.R;
-import com.getit.app.databinding.ItemCourseSelectorBinding;
-import com.getit.app.models.Course;
+import com.getit.app.databinding.ItemQuestionSelectorBinding;
+import com.getit.app.models.Question;
 import com.getit.app.utilities.UIUtils;
 
 import java.util.List;
 
-public class CoursesSelectorAdapter extends RecyclerView.Adapter<CoursesSelectorAdapter.ViewHolder> {
-    private List<Course> courses;
+public class QuestionSelectorAdapter extends RecyclerView.Adapter<QuestionSelectorAdapter.ViewHolder> {
+    private List<Question> questions;
     private OnItemClickListener listener;
-    private List<Course> selectedCourses;
+    private List<Question> selectedQuestions;
 
     // data is passed into the constructor
-    public CoursesSelectorAdapter(List<Course> courses, OnItemClickListener listener, List<Course> selectedCourses) {
-        this.courses = courses;
+    public QuestionSelectorAdapter(List<Question> questions, OnItemClickListener listener, List<Question> selectedQuestions) {
+        this.questions = questions;
         this.listener = listener;
-        this.selectedCourses = selectedCourses;
+        this.selectedQuestions = selectedQuestions;
     }
 
     // inflates the row layout from xml when needed
@@ -34,48 +34,48 @@ public class CoursesSelectorAdapter extends RecyclerView.Adapter<CoursesSelector
         return new ViewHolder(view);
     }
 
-    public void handelSelectedCourses(Course course) {
-        if (selectedCourses.contains(course)) {
-            selectedCourses.remove(course);
+    public void handelSelectedCourses(Question question) {
+        if (selectedQuestions.contains(question)) {
+            selectedQuestions.remove(question);
         } else {
-            selectedCourses.add(course);
+            selectedQuestions.add(question);
         }
         notifyDataSetChanged();
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Course course = courses.get(position);
+        Question question = questions.get(position);
 
         Drawable drawable = null;
-        if (selectedCourses.contains(course)) {
+        if (selectedQuestions.contains(question)) {
             drawable = ResourcesCompat.getDrawable(holder.binding.check.getResources(), R.drawable.ic_check, null);
         } else {
             drawable = ResourcesCompat.getDrawable(holder.binding.check.getResources(), R.drawable.ic_unchecked, null);
         }
         holder.binding.check.setImageDrawable(drawable);
-        holder.binding.name.setText(course.getName());
-        holder.binding.grade.setText(UIUtils.getGrade(course.getGrade()));
+        holder.binding.name.setText(question.getTitle());
+        holder.binding.type.setText(UIUtils.getQuestionType(question.getType()));
     }
 
     // total number of rows
     @Override
     public int getItemCount() {
-        return courses.size();
+        return questions.size();
     }
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ItemCourseSelectorBinding binding;
+        ItemQuestionSelectorBinding binding;
 
         ViewHolder(View view) {
             super(view);
-            binding = ItemCourseSelectorBinding.bind(view);
+            binding = ItemQuestionSelectorBinding.bind(view);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getAdapterPosition() >= 0 && getAdapterPosition() < courses.size()) {
-                        handelSelectedCourses(courses.get(getAdapterPosition()));
+                    if (getAdapterPosition() >= 0 && getAdapterPosition() < questions.size()) {
+                        handelSelectedCourses(questions.get(getAdapterPosition()));
                         if (listener != null) listener.onCourseClickListener(getAdapterPosition());
                     }
                 }

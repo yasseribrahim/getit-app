@@ -57,6 +57,19 @@
     <string name="str_login_successful">تم تسجيل الدخول بنجاح</string>
     <string name="str_username_invalid">اسم مستخدم غير صالح</string>
 
+    <string name="str_score_pass_formatted">نجاح %s</string>
+    <string name="str_score_total_formatted">النهائية %s</string>
+    <string name="str_questions_formatted">الاسئلة: %s</string>
+
+    <string name="str_title_exam">اختبار</string>
+    <string name="str_total_score">إجمالي النقاط</string>
+    <string name="str_total_score_hint">أدخل إجمالي النقاط</string>
+    <string name="str_pass_score">درجة النجاح</string>
+    <string name="str_pass_score_hint">أدخل درجة النجاح</string>
+    <string name="str_is_active">نشط</string>
+    <string name="str_questions_list">الأسئلة</string>
+    <string name="str_question_list_empty">الرجاء تحديد الصف والدورة أولا</string>
+
     <string name="str_title_question">سؤال</string>
     <string name="str_title">العنوان</string>
     <string name="str_title_hint">أدخل العنوان</string>
@@ -64,6 +77,7 @@
     <string name="str_description_hint">أدخل الوصف</string>
     <string name="str_question_type">نوع السؤال</string>
     <string name="str_question_type_hint">اختر نوع السؤال</string>
+    <string name="str_questions_list_hint">الرجاء تحديد قائمة الأسئلة</string>
     <string name="str_question_multi_choices">الاختيارات</string>
     <string name="str_question_multi_choices_hint">ادخل الاختيارات</string>
 
@@ -74,6 +88,7 @@
     <string name="str_phone">الهاتف</string>
     <string name="str_address">العنوان</string>
     <string name="str_grade">الصف</string>
+    <string name="str_grade_hint">اختر الصف</string>
     <string name="str_username_hint" translatable="false">user@example.com</string>
     <string name="str_password_hint">أدخل كلمة المرور الخاصة بك</string>
     <string name="str_default_password" translatable="false">12345678</string>

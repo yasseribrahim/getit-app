@@ -75,15 +75,15 @@ public class GradeSelectorBottomSheet extends BottomSheetDialogFragment implemen
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.txt_grade_1 -> listener.onItemClick(1);
-            case R.id.txt_grade_2 -> listener.onItemClick(2);
-            case R.id.txt_grade_3 -> listener.onItemClick(3);
-            case R.id.txt_grade_4 -> listener.onItemClick(4);
+            case R.id.txt_grade_1 -> listener.onGradeClick(1);
+            case R.id.txt_grade_2 -> listener.onGradeClick(2);
+            case R.id.txt_grade_3 -> listener.onGradeClick(3);
+            case R.id.txt_grade_4 -> listener.onGradeClick(4);
         }
         dismiss();
     }
 
     public interface ItemClickListener {
-        void onItemClick(int id);
+        void onGradeClick(int id);
     }
 }

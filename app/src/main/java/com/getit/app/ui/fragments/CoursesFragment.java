@@ -21,7 +21,7 @@ import com.getit.app.databinding.FragmentCoursesBinding;
 import com.getit.app.models.Course;
 import com.getit.app.persenters.courses.CoursesCallback;
 import com.getit.app.persenters.courses.CoursesPresenter;
-import com.getit.app.ui.activities.CourseActivity;
+import com.getit.app.ui.activities.admin.CourseActivity;
 import com.getit.app.ui.adptres.CoursesAdapter;
 
 import java.util.ArrayList;

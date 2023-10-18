@@ -18,24 +18,24 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.getit.app.Constants;
 import com.getit.app.R;
 import com.getit.app.databinding.FragmentQuestonsBinding;
-import com.getit.app.models.Question;
-import com.getit.app.persenters.questions.QuestionsCallback;
-import com.getit.app.persenters.questions.QuestionsPresenter;
-import com.getit.app.ui.activities.admin.QuestionActivity;
-import com.getit.app.ui.adptres.QuestionsAdapter;
+import com.getit.app.models.Exam;
+import com.getit.app.persenters.exams.ExamsCallback;
+import com.getit.app.persenters.exams.ExamsPresenter;
+import com.getit.app.ui.activities.admin.ExamActivity;
+import com.getit.app.ui.adptres.ExamsAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionsFragment extends Fragment implements QuestionsCallback, QuestionsAdapter.OnQuestionsClickListener {
+public class ExamsFragment extends Fragment implements ExamsCallback, ExamsAdapter.OnExamsClickListener {
     private FragmentQuestonsBinding binding;
-    private QuestionsPresenter presenter;
-    private QuestionsAdapter adapter;
-    private List<Question> questions, searchedQuestions;
+    private ExamsPresenter presenter;
+    private ExamsAdapter adapter;
+    private List<Exam> exams, searchedExams;
 
-    public static QuestionsFragment newInstance() {
+    public static ExamsFragment newInstance() {
         Bundle args = new Bundle();
-        QuestionsFragment fragment = new QuestionsFragment();
+        ExamsFragment fragment = new ExamsFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -44,7 +44,7 @@ public class QuestionsFragment extends Fragment implements QuestionsCallback, Qu
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentQuestonsBinding.inflate(inflater);
 
-        presenter = new QuestionsPresenter(this);
+        presenter = new ExamsPresenter(this);
 
         binding.refreshLayout.setColorSchemeResources(R.color.refreshColor1, R.color.refreshColor2, R.color.refreshColor3, R.color.refreshColor4);
         binding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -57,7 +57,7 @@ public class QuestionsFragment extends Fragment implements QuestionsCallback, Qu
         binding.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openQuestionActivity(null);
+                openExamActivity(null);
             }
         });
 
@@ -78,17 +78,17 @@ public class QuestionsFragment extends Fragment implements QuestionsCallback, Qu
             }
         });
 
-        questions = new ArrayList<>();
-        searchedQuestions = new ArrayList<>();
+        exams = new ArrayList<>();
+        searchedExams = new ArrayList<>();
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new QuestionsAdapter(searchedQuestions, this);
+        adapter = new ExamsAdapter(searchedExams, this);
         binding.recyclerView.setAdapter(adapter);
 
         return binding.getRoot();
     }
 
     private void load() {
-        presenter.getQuestions();
+        presenter.getExams();
     }
 
     @Override
@@ -106,9 +106,9 @@ public class QuestionsFragment extends Fragment implements QuestionsCallback, Qu
     }
 
     @Override
-    public void onGetQuestionsComplete(List<Question> users) {
-        this.questions.clear();
-        this.questions.addAll(users);
+    public void onGetExamsComplete(List<Exam> users) {
+        this.exams.clear();
+        this.exams.addAll(users);
         search(binding.textSearch.getText().toString());
     }
 
@@ -128,31 +128,29 @@ public class QuestionsFragment extends Fragment implements QuestionsCallback, Qu
     }
 
     private void search(String searchedText) {
-        searchedQuestions.clear();
+        searchedExams.clear();
         if (!searchedText.isEmpty()) {
-            for (Question user : questions) {
+            for (Exam user : exams) {
                 if (isMatched(user, searchedText)) {
-                    searchedQuestions.add(user);
+                    searchedExams.add(user);
                 }
             }
         } else {
-            searchedQuestions.addAll(questions);
+            searchedExams.addAll(exams);
         }
 
         refresh();
     }
 
-    private boolean isMatched(Question question, String text) {
+    private boolean isMatched(Exam question, String text) {
         String searchedText = text.toLowerCase();
-        boolean result = question.getTitle().toLowerCase().contains(searchedText) ||
-                (question.getDescription() != null && question.getDescription().toLowerCase().contains(searchedText)) ||
-                (question.getCourseName() != null && question.getCourseName().toLowerCase().contains(searchedText));
+        boolean result = question.getTitle().toLowerCase().contains(searchedText) || (question.getDescription() != null && question.getDescription().toLowerCase().contains(searchedText)) || (question.getCourseName() != null && question.getCourseName().toLowerCase().contains(searchedText));
         return result;
     }
 
     private void refresh() {
         binding.message.setVisibility(View.GONE);
-        if (searchedQuestions.isEmpty()) {
+        if (searchedExams.isEmpty()) {
             binding.message.setVisibility(View.VISIBLE);
         }
 
@@ -160,44 +158,44 @@ public class QuestionsFragment extends Fragment implements QuestionsCallback, Qu
     }
 
     @Override
-    public void onQuestionViewListener(int position) {
-        Question user = searchedQuestions.get(position);
+    public void onExamViewListener(int position) {
+        Exam user = searchedExams.get(position);
     }
 
     @Override
-    public void onQuestionDeleteListener(int position) {
-        if (position >= 0 && position < searchedQuestions.size()) {
-            Question question = searchedQuestions.get(position);
-            int index = questions.indexOf(question);
-            searchedQuestions.remove(position);
-            if (index >= 0 && index < questions.size()) {
-                questions.remove(position);
+    public void onExamDeleteListener(int position) {
+        if (position >= 0 && position < searchedExams.size()) {
+            Exam exam = searchedExams.get(position);
+            int index = exams.indexOf(exam);
+            searchedExams.remove(position);
+            if (index >= 0 && index < exams.size()) {
+                exams.remove(position);
             }
 
-            presenter.delete(question);
+            presenter.delete(exam);
         }
     }
 
     @Override
-    public void onQuestionEditListener(int position) {
-        if (position >= 0 && position < searchedQuestions.size()) {
-            Question user = searchedQuestions.get(position);
-            openQuestionActivity(user);
+    public void onExamEditListener(int position) {
+        if (position >= 0 && position < searchedExams.size()) {
+            Exam exam = searchedExams.get(position);
+            openExamActivity(exam);
         }
     }
 
     @Override
-    public void onDeleteQuestionComplete(Question question) {
-        int index = searchedQuestions.indexOf(question);
-        if(index != -1) {
+    public void onDeleteExamComplete(Exam question) {
+        int index = searchedExams.indexOf(question);
+        if (index != -1) {
             adapter.notifyItemRemoved(index);
         }
         Toast.makeText(getContext(), R.string.str_message_delete_successfully, Toast.LENGTH_LONG).show();
     }
 
-    private void openQuestionActivity(Question question) {
-        Intent intent = new Intent(getContext(), QuestionActivity.class);
-        intent.putExtra(Constants.ARG_OBJECT, question);
+    private void openExamActivity(Exam exam) {
+        Intent intent = new Intent(getContext(), ExamActivity.class);
+        intent.putExtra(Constants.ARG_OBJECT, exam);
         startActivity(intent);
     }
 }

@@ -1,4 +1,4 @@
-package com.getit.app.ui.activities;
+package com.getit.app.ui.activities.admin;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -19,6 +19,7 @@ import com.getit.app.R;
 import com.getit.app.databinding.ActivityHomeBinding;
 import com.getit.app.models.User;
 import com.getit.app.ui.fragments.CoursesFragment;
+import com.getit.app.ui.fragments.ExamsFragment;
 import com.getit.app.ui.fragments.HomeFragment;
 import com.getit.app.ui.fragments.MoreFragment;
 import com.getit.app.ui.fragments.QuestionsFragment;
@@ -72,6 +73,10 @@ public class HomeActivity extends AppCompatActivity {
                                 case R.id.nav_questions:
                                     showFragment(QuestionsFragment.newInstance(), R.id.container);
                                     binding.content.toolbar.setTitle(R.string.menu_questions);
+                                    break;
+                                case R.id.nav_exams:
+                                    showFragment(ExamsFragment.newInstance(), R.id.container);
+                                    binding.content.toolbar.setTitle(R.string.menu_exams);
                                     break;
                                 case R.id.nav_more:
                                     showFragment(MoreFragment.newInstance(), R.id.container);
