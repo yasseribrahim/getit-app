@@ -1,8 +1,11 @@
 package com.getit.app.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Objects;
 
-public class Answer {
+public class Answer implements Parcelable {
     private Question question;
     private int selectedAnswerIndex;
     private String answer;
@@ -89,4 +92,43 @@ public class Answer {
                 ", isRight=" + isRight +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.question, flags);
+        dest.writeInt(this.selectedAnswerIndex);
+        dest.writeString(this.answer);
+        dest.writeValue(this.isRight);
+    }
+
+    public void readFromParcel(Parcel source) {
+        this.question = source.readParcelable(Question.class.getClassLoader());
+        this.selectedAnswerIndex = source.readInt();
+        this.answer = source.readString();
+        this.isRight = (Boolean) source.readValue(Boolean.class.getClassLoader());
+    }
+
+    protected Answer(Parcel in) {
+        this.question = in.readParcelable(Question.class.getClassLoader());
+        this.selectedAnswerIndex = in.readInt();
+        this.answer = in.readString();
+        this.isRight = (Boolean) in.readValue(Boolean.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Answer> CREATOR = new Parcelable.Creator<Answer>() {
+        @Override
+        public Answer createFromParcel(Parcel source) {
+            return new Answer(source);
+        }
+
+        @Override
+        public Answer[] newArray(int size) {
+            return new Answer[size];
+        }
+    };
 }
