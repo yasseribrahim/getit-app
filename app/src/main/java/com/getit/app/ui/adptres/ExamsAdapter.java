@@ -44,7 +44,7 @@ public class ExamsAdapter extends RecyclerView.Adapter<ExamsAdapter.ViewHolder> 
         holder.binding.description.setVisibility(exam.getDescription() != null && !exam.getDescription().isEmpty() ? View.VISIBLE : View.GONE);
         holder.binding.date.setText(DatesUtils.formatDateOnly(exam.getDate()));
         int questionsNumber = exam.getQuestions() != null ? exam.getQuestions().size() : 0;
-        holder.binding.questions.setText(holder.binding.questions.getResources().getString(R.string.str_questions_formatted, questionsNumber + ""));
+        //holder.binding.questions.setText(holder.binding.questions.getResources().getString(R.string.str_questions_formatted, questionsNumber + ""));
         holder.binding.passScore.setText(holder.binding.passScore.getResources().getString(R.string.str_score_pass_formatted, exam.getScorePass() + ""));
         holder.binding.totalScore.setText(holder.binding.totalScore.getResources().getString(R.string.str_score_total_formatted, exam.getScoreTotal() + ""));
     }

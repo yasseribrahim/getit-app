@@ -133,6 +133,10 @@
 
     <string name="str_question_type_multi_choices">الاختيارات المتعددة</string>
     <string name="str_question_type_article">مقالى</string>
+    <string name="str_question_type_true_false">صواب خطأ</string>
+    <string name="str_true">إجابة صحيحة</string>
+    <string name="str_false">إجابة خاطئة</string>
+
     <string name="str_grade_1">الصف الأول</string>
     <string name="str_grade_2">الصف الثاني</string>
     <string name="str_grade_3">الصف الثالث</string>

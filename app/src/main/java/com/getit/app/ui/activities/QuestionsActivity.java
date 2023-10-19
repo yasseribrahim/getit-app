@@ -1,5 +1,6 @@
 package com.getit.app.ui.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,8 +16,8 @@ import com.getit.app.R;
 import com.getit.app.databinding.ActivityQuestonsBinding;
 import com.getit.app.models.Lesson;
 import com.getit.app.models.Question;
-import com.getit.app.persenters.oldquestions.QuestionsCallback;
-import com.getit.app.persenters.oldquestions.QuestionsPresenter;
+import com.getit.app.persenters.questions.QuestionsCallback;
+import com.getit.app.persenters.questions.QuestionsPresenter;
 import com.getit.app.ui.activities.admin.QuestionActivity;
 import com.getit.app.ui.adptres.QuestionsAdapter;
 import com.getit.app.utilities.helpers.LocaleHelper;
@@ -37,6 +38,7 @@ public class QuestionsActivity extends BaseActivity implements QuestionsCallback
         LocaleHelper.setLocale(this, getCurrentLanguage().getLanguage());
         super.onCreate(savedInstanceState);
         binding = ActivityQuestonsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         presenter = new QuestionsPresenter(this);
         lesson = getIntent().getParcelableExtra(Constants.ARG_OBJECT);
@@ -53,7 +55,10 @@ public class QuestionsActivity extends BaseActivity implements QuestionsCallback
         binding.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openQuestionActivity(null);
+                Question question = new Question();
+                question.setLessonId(lesson.getId());
+                question.setLessonName(lesson.getName());
+                openQuestionActivity(question);
             }
         });
 
@@ -79,10 +84,20 @@ public class QuestionsActivity extends BaseActivity implements QuestionsCallback
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new QuestionsAdapter(searchedQuestions, this);
         binding.recyclerView.setAdapter(adapter);
+        setUpActionBar();
+    }
+
+    @SuppressLint("WrongConstant")
+    private void setUpActionBar() {
+        binding.appBarLayout.toolbar.setTitle(lesson.getName());
+        setSupportActionBar(binding.appBarLayout.toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        binding.appBarLayout.toolbar.setNavigationIcon(R.drawable.back_to_home_button);
     }
 
     private void load() {
-        presenter.getQuestions();
+        presenter.getQuestions(lesson.getId());
     }
 
     @Override
@@ -99,12 +114,12 @@ public class QuestionsActivity extends BaseActivity implements QuestionsCallback
         }
     }
 
-//    @Override
-//    public void onGetQuestionsComplete(List<Question> users) {
-//        this.questions.clear();
-//        this.questions.addAll(users);
-//        search(binding.textSearch.getText().toString());
-//    }
+    @Override
+    public void onGetQuestionsComplete(List<Question> users) {
+        this.questions.clear();
+        this.questions.addAll(users);
+        search(binding.textSearch.getText().toString());
+    }
 
     @Override
     public void onShowLoading() {
@@ -167,7 +182,7 @@ public class QuestionsActivity extends BaseActivity implements QuestionsCallback
                 questions.remove(index);
             }
 
-           // presenter.delete(question);
+            presenter.delete(question);
         }
     }
 
@@ -179,15 +194,15 @@ public class QuestionsActivity extends BaseActivity implements QuestionsCallback
         }
     }
 
-//    @Override
-//    public void onDeleteQuestionComplete(Question Question) {
-//        int index = searchedQuestions.indexOf(Question);
-//        if (index != -1) {
-//            searchedQuestions.remove(index);
-//            adapter.notifyItemRemoved(index);
-//        }
-//        Toast.makeText(this, R.string.str_message_delete_successfully, Toast.LENGTH_LONG).show();
-//    }
+    @Override
+    public void onDeleteQuestionComplete(Question Question) {
+        int index = searchedQuestions.indexOf(Question);
+        if (index != -1) {
+            searchedQuestions.remove(index);
+            adapter.notifyItemRemoved(index);
+        }
+        Toast.makeText(this, R.string.str_message_delete_successfully, Toast.LENGTH_LONG).show();
+    }
 
     private void openQuestionActivity(Question Question) {
         Intent intent = new Intent(this, QuestionActivity.class);

@@ -9,23 +9,20 @@ import android.widget.Toast;
 import com.getit.app.Constants;
 import com.getit.app.R;
 import com.getit.app.databinding.ActivityQuestionBinding;
-import com.getit.app.models.Course;
-import com.getit.app.models.OldQuestion;
+import com.getit.app.models.Question;
 import com.getit.app.models.QuestionChoice;
-import com.getit.app.persenters.oldquestions.QuestionsCallback;
-import com.getit.app.persenters.oldquestions.QuestionsPresenter;
+import com.getit.app.persenters.questions.QuestionsCallback;
+import com.getit.app.persenters.questions.QuestionsPresenter;
 import com.getit.app.ui.activities.BaseActivity;
-import com.getit.app.ui.fragments.CourseSelectorBottomSheet;
 import com.getit.app.utilities.ToastUtils;
 import com.getit.app.utilities.helpers.LocaleHelper;
 
 import java.util.ArrayList;
 
-public class QuestionActivity extends BaseActivity implements QuestionsCallback, CourseSelectorBottomSheet.ItemClickListener, View.OnClickListener {
+public class QuestionActivity extends BaseActivity implements QuestionsCallback, View.OnClickListener {
     private ActivityQuestionBinding binding;
-
     private QuestionsPresenter presenter;
-    private OldQuestion oldQuestion;
+    private Question question;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,27 +33,19 @@ public class QuestionActivity extends BaseActivity implements QuestionsCallback,
 
         presenter = new QuestionsPresenter(this);
 
-        oldQuestion = getIntent().getParcelableExtra(Constants.ARG_OBJECT);
-        if (oldQuestion == null) {
-            oldQuestion = new OldQuestion();
-        }
+        question = getIntent().getParcelableExtra(Constants.ARG_OBJECT);
         bind();
-
-        binding.course.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CourseSelectorBottomSheet.newInstance(oldQuestion.getCourseId(), 0).show(getSupportFragmentManager(), "");
-            }
-        });
 
         binding.questionTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.question_type_multi_choices ->
-                            oldQuestion.setType(Constants.QUESTION_TYPE_MULTI_CHOICE);
+                            question.setType(Constants.QUESTION_TYPE_MULTI_CHOICE);
+                    case R.id.question_type_true_false ->
+                            question.setType(Constants.QUESTION_TYPE_TRUE_FALSE);
                     case R.id.question_type_article ->
-                            oldQuestion.setType(Constants.QUESTION_TYPE_ARTICLE);
+                            question.setType(Constants.QUESTION_TYPE_ARTICLE);
                 }
                 handelQuestionType();
             }
@@ -77,24 +66,24 @@ public class QuestionActivity extends BaseActivity implements QuestionsCallback,
                     binding.title.requestFocus();
                     return;
                 }
-                if (oldQuestion.getCourseId() == null) {
-                    binding.course.setError(getString(R.string.str_course_hint));
-                    binding.course.requestFocus();
-                    return;
-                }
-                if (!binding.questionTypeArticle.isChecked() && !binding.questionTypeMultiChoices.isChecked()) {
+                if (!binding.questionTypeArticle.isChecked() && !binding.questionTypeMultiChoices.isChecked() && !binding.questionTypeTrueFalse.isChecked()) {
                     ToastUtils.longToast(R.string.str_question_type_hint);
                     return;
                 }
-                if (oldQuestion.isMultiChoices()) {
+                if (question.isMultiChoices()) {
                     if (!validateMultiChoices()) {
+                        return;
+                    }
+                } else if (question.isTrueFalse()) {
+                    if (!binding.isTrueAnswer.isChecked() && !binding.isFalseAnswer.isChecked()) {
+                        ToastUtils.longToast(R.string.str_enter_value);
                         return;
                     }
                 }
 
-                oldQuestion.setTitle(title);
-                oldQuestion.setDescription(binding.description.getText().toString());
-                presenter.save(oldQuestion);
+                question.setTitle(title);
+                question.setDescription(binding.description.getText().toString());
+                presenter.save(question);
             }
         });
     }
@@ -108,13 +97,6 @@ public class QuestionActivity extends BaseActivity implements QuestionsCallback,
     @Override
     public void onFailure(String message, View.OnClickListener listener) {
         Toast.makeText(this, getString(R.string.str_save_fail, message), Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onCourseClick(Course course) {
-        oldQuestion.setCourseId(course.getId());
-        oldQuestion.setCourseName(course.getName());
-        binding.course.setText(course.getName());
     }
 
     @Override
@@ -135,30 +117,30 @@ public class QuestionActivity extends BaseActivity implements QuestionsCallback,
     }
 
     private void bind() {
-        binding.title.setText(oldQuestion.getTitle());
-        binding.description.setText(oldQuestion.getDescription());
-        binding.course.setText(oldQuestion.getCourseName());
-        binding.questionTypeArticle.setChecked(!oldQuestion.isMultiChoices());
-        binding.questionTypeMultiChoices.setChecked(oldQuestion.isMultiChoices());
+        binding.title.setText(question.getTitle());
+        binding.description.setText(question.getDescription());
+        binding.questionTypeArticle.setChecked(question.isArticle());
+        binding.questionTypeMultiChoices.setChecked(question.isMultiChoices());
+        binding.questionTypeTrueFalse.setChecked(question.isTrueFalse());
         handelQuestionType();
     }
 
     private void handelQuestionType() {
-        if (oldQuestion.isMultiChoices()) {
-            if (oldQuestion.getChoices() == null) {
-                oldQuestion.setChoices(new ArrayList<>());
+        if (question.isMultiChoices()) {
+            if (question.getChoices() == null) {
+                question.setChoices(new ArrayList<>());
             }
 
             // Prepare Choices
-            int index = oldQuestion.getChoices().size();
+            int index = question.getChoices().size();
             while (index < 4) {
-                oldQuestion.getChoices().add(new QuestionChoice());
+                question.getChoices().add(new QuestionChoice());
                 index++;
             }
 
             // Fill Choices
             index = 1;
-            for (QuestionChoice choice : oldQuestion.getChoices()) {
+            for (QuestionChoice choice : question.getChoices()) {
                 switch (index) {
                     case 1 -> {
                         binding.choice1.setText(choice.getTitle());
@@ -179,17 +161,23 @@ public class QuestionActivity extends BaseActivity implements QuestionsCallback,
                 }
                 index++;
             }
+        } else if (question.isTrueFalse()) {
+            if (question.getId() != null) {
+                binding.isTrueAnswer.setChecked(question.isAnswerTrue());
+                binding.isFalseAnswer.setChecked(!question.isAnswerTrue());
+            }
         } else {
-            oldQuestion.setChoices(new ArrayList<>());
+            question.setChoices(new ArrayList<>());
         }
-        binding.choices.setVisibility(oldQuestion.isMultiChoices() ? View.VISIBLE : View.GONE);
+        binding.choices.setVisibility(question.isMultiChoices() ? View.VISIBLE : View.GONE);
+        binding.questionTrueFalseElements.setVisibility(question.isTrueFalse() ? View.VISIBLE : View.GONE);
     }
 
     private boolean validateMultiChoices() {
         int index = 1;
         String choiceText;
         boolean isCorrectAnswer, correctAnswerSelected = false;
-        for (QuestionChoice choice : oldQuestion.getChoices()) {
+        for (QuestionChoice choice : question.getChoices()) {
             choiceText = "";
             isCorrectAnswer = false;
             switch (index) {
@@ -216,8 +204,8 @@ public class QuestionActivity extends BaseActivity implements QuestionsCallback,
                 return false;
             }
             correctAnswerSelected = correctAnswerSelected || isCorrectAnswer;
-            oldQuestion.getChoices().get(index - 1).setTitle(choiceText);
-            oldQuestion.getChoices().get(index - 1).setCorrectAnswer(isCorrectAnswer);
+            question.getChoices().get(index - 1).setTitle(choiceText);
+            question.getChoices().get(index - 1).setCorrectAnswer(isCorrectAnswer);
             index++;
         }
 

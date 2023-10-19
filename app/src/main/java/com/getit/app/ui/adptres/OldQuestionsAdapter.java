@@ -36,7 +36,7 @@ public class OldQuestionsAdapter extends RecyclerView.Adapter<OldQuestionsAdapte
         OldQuestion oldQuestion = oldQuestions.get(position);
 
         holder.binding.title.setText(oldQuestion.getTitle());
-        holder.binding.course.setText(oldQuestion.getCourseName());
+        //holder.binding.course.setText(oldQuestion.getCourseName());
         holder.binding.description.setText(oldQuestion.getDescription());
         holder.binding.description.setVisibility(oldQuestion.getDescription() != null && !oldQuestion.getDescription().isEmpty() ? View.VISIBLE : View.GONE);
         holder.binding.type.setText(UIUtils.getQuestionType(oldQuestion.getType()));

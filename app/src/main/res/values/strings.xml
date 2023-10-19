@@ -133,10 +133,13 @@
 
     <string name="str_question_type_multi_choices">Multi Choices</string>
     <string name="str_question_type_article">Article</string>
+    <string name="str_question_type_true_false">True False</string>
     <string name="str_grade_1">Grade One</string>
     <string name="str_grade_2">Grade Two</string>
     <string name="str_grade_3">Grade Three</string>
     <string name="str_grade_4">Grade Four</string>
+    <string name="str_true">True Answer</string>
+    <string name="str_false">False Answer</string>
 
     <string name="str_grade_header">Select Grade</string>
     <string name="str_course_header">Select Course</string>

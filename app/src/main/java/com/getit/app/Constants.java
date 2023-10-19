@@ -3,6 +3,7 @@ package com.getit.app;
 public interface Constants {
     int QUESTION_TYPE_MULTI_CHOICE = 1;
     int QUESTION_TYPE_ARTICLE = 2;
+    int QUESTION_TYPE_TRUE_FALSE = 3;
 
     int GRADE_ONE = 1;
     int GRADE_TWO = 2;

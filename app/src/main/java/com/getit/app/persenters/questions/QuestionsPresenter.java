@@ -46,7 +46,7 @@ public class QuestionsPresenter implements BasePresenter {
         if (question.getId() == null) {
             question.setId(Calendar.getInstance().getTimeInMillis() + "");
         }
-        reference.child(question.getId()).setValue(question).addOnSuccessListener(new OnSuccessListener<Void>() {
+        reference.child(question.getLessonId()).child(question.getId()).setValue(question).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 if (callback != null) {
@@ -63,7 +63,7 @@ public class QuestionsPresenter implements BasePresenter {
         });
     }
 
-    public void getQuestions() {
+    public void getQuestions(String lessonId) {
         callback.onShowLoading();
         listener = new ValueEventListener() {
             @Override
@@ -89,12 +89,12 @@ public class QuestionsPresenter implements BasePresenter {
                 }
             }
         };
-        reference.addListenerForSingleValueEvent(listener);
+        reference.child(lessonId).addListenerForSingleValueEvent(listener);
     }
 
-    public void getQuestionById(String id) {
+    public void getQuestionById(String lessonId, String id) {
         callback.onShowLoading();
-        reference.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.child(lessonId).child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (callback != null) {
@@ -111,7 +111,7 @@ public class QuestionsPresenter implements BasePresenter {
     }
 
     public void delete(Question question) {
-        reference.child(question.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+        reference.child(question.getLessonId()).child(question.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 if (callback != null) {

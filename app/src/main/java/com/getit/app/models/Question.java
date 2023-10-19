@@ -18,6 +18,7 @@ public class Question implements Parcelable {
     private String description;
     private int type;
     private List<QuestionChoice> choices;
+    private boolean isAnswerTrue;
 
     public Question() {
         this(null, null, null, null, 0);
@@ -29,6 +30,7 @@ public class Question implements Parcelable {
         this.title = title;
         this.description = description;
         this.type = type;
+        this.isAnswerTrue = false;
         if (type == Constants.QUESTION_TYPE_MULTI_CHOICE) {
             choices = Arrays.asList(new QuestionChoice(), new QuestionChoice(), new QuestionChoice(), new QuestionChoice());
         } else {
@@ -96,6 +98,22 @@ public class Question implements Parcelable {
         return type == Constants.QUESTION_TYPE_MULTI_CHOICE;
     }
 
+    public boolean isTrueFalse() {
+        return type == Constants.QUESTION_TYPE_TRUE_FALSE;
+    }
+
+    public boolean isArticle() {
+        return type == Constants.QUESTION_TYPE_ARTICLE;
+    }
+
+    public void setAnswerTrue(boolean answerTrue) {
+        isAnswerTrue = answerTrue;
+    }
+
+    public boolean isAnswerTrue() {
+        return isAnswerTrue;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -113,12 +131,13 @@ public class Question implements Parcelable {
     public String toString() {
         return "Question{" +
                 "id='" + id + '\'' +
-                ", courseId='" + lessonId + '\'' +
-                ", courseName='" + lessonName + '\'' +
+                ", lessonId='" + lessonId + '\'' +
+                ", lessonName='" + lessonName + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", type=" + type +
                 ", choices=" + choices +
+                ", isTrue=" + isAnswerTrue +
                 '}';
     }
 
@@ -135,7 +154,8 @@ public class Question implements Parcelable {
         dest.writeString(this.title);
         dest.writeString(this.description);
         dest.writeInt(this.type);
-        dest.writeList(this.choices);
+        dest.writeTypedList(this.choices);
+        dest.writeByte(this.isAnswerTrue ? (byte) 1 : (byte) 0);
     }
 
     public void readFromParcel(Parcel source) {
@@ -145,8 +165,8 @@ public class Question implements Parcelable {
         this.title = source.readString();
         this.description = source.readString();
         this.type = source.readInt();
-        this.choices = new ArrayList<QuestionChoice>();
-        source.readList(this.choices, QuestionChoice.class.getClassLoader());
+        this.choices = source.createTypedArrayList(QuestionChoice.CREATOR);
+        this.isAnswerTrue = source.readByte() != 0;
     }
 
     protected Question(Parcel in) {
@@ -156,8 +176,8 @@ public class Question implements Parcelable {
         this.title = in.readString();
         this.description = in.readString();
         this.type = in.readInt();
-        this.choices = new ArrayList<QuestionChoice>();
-        in.readList(this.choices, QuestionChoice.class.getClassLoader());
+        this.choices = in.createTypedArrayList(QuestionChoice.CREATOR);
+        this.isAnswerTrue = in.readByte() != 0;
     }
 
     public static final Creator<Question> CREATOR = new Creator<Question>() {

@@ -62,6 +62,8 @@ public class UIUtils {
                 return CustomApplication.getApplication().getApplicationContext().getString(R.string.str_question_type_multi_choices);
             case Constants.QUESTION_TYPE_ARTICLE:
                 return CustomApplication.getApplication().getApplicationContext().getString(R.string.str_question_type_article);
+            case Constants.QUESTION_TYPE_TRUE_FALSE:
+                return CustomApplication.getApplication().getApplicationContext().getString(R.string.str_question_type_true_false);
         }
         return "N/A";
     }
