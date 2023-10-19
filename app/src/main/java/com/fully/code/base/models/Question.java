@@ -1,9 +1,9 @@
-package com.getit.app.models;
+package com.fully.code.base.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.getit.app.Constants;
+import com.fully.code.base.Constants;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,8 +12,8 @@ import java.util.Objects;
 
 public class Question implements Parcelable {
     private String id;
-    private String lessonId;
-    private String lessonName;
+    private String courseId;
+    private String courseName;
     private String title;
     private String description;
     private int type;
@@ -23,9 +23,9 @@ public class Question implements Parcelable {
         this(null, null, null, null, 0);
     }
 
-    public Question(String id, String lessonId, String title, String description, int type) {
+    public Question(String id, String courseId, String title, String description, int type) {
         this.id = id;
-        this.lessonId = lessonId;
+        this.courseId = courseId;
         this.title = title;
         this.description = description;
         this.type = type;
@@ -44,20 +44,20 @@ public class Question implements Parcelable {
         this.id = id;
     }
 
-    public String getLessonId() {
-        return lessonId;
+    public String getCourseId() {
+        return courseId;
     }
 
-    public void setLessonId(String lessonId) {
-        this.lessonId = lessonId;
+    public void setCourseId(String courseId) {
+        this.courseId = courseId;
     }
 
-    public void setLessonName(String lessonName) {
-        this.lessonName = lessonName;
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
-    public String getLessonName() {
-        return lessonName;
+    public String getCourseName() {
+        return courseName;
     }
 
     public String getTitle() {
@@ -100,8 +100,8 @@ public class Question implements Parcelable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Question oldQuestion = (Question) o;
-        return id.equals(oldQuestion.id);
+        Question question = (Question) o;
+        return id.equals(question.id);
     }
 
     @Override
@@ -113,8 +113,8 @@ public class Question implements Parcelable {
     public String toString() {
         return "Question{" +
                 "id='" + id + '\'' +
-                ", courseId='" + lessonId + '\'' +
-                ", courseName='" + lessonName + '\'' +
+                ", courseId='" + courseId + '\'' +
+                ", courseName='" + courseName + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", type=" + type +
@@ -130,8 +130,8 @@ public class Question implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
-        dest.writeString(this.lessonId);
-        dest.writeString(this.lessonName);
+        dest.writeString(this.courseId);
+        dest.writeString(this.courseName);
         dest.writeString(this.title);
         dest.writeString(this.description);
         dest.writeInt(this.type);
@@ -140,8 +140,8 @@ public class Question implements Parcelable {
 
     public void readFromParcel(Parcel source) {
         this.id = source.readString();
-        this.lessonId = source.readString();
-        this.lessonName = source.readString();
+        this.courseId = source.readString();
+        this.courseName = source.readString();
         this.title = source.readString();
         this.description = source.readString();
         this.type = source.readInt();
@@ -151,8 +151,8 @@ public class Question implements Parcelable {
 
     protected Question(Parcel in) {
         this.id = in.readString();
-        this.lessonId = in.readString();
-        this.lessonName = in.readString();
+        this.courseId = in.readString();
+        this.courseName = in.readString();
         this.title = in.readString();
         this.description = in.readString();
         this.type = in.readInt();

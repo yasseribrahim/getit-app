@@ -1,10 +1,10 @@
-package com.getit.app.persenters.questions;
+package com.fully.code.base.persenters.questions;
 
 import androidx.annotation.NonNull;
 
-import com.getit.app.Constants;
-import com.getit.app.models.Question;
-import com.getit.app.persenters.BasePresenter;
+import com.fully.code.base.Constants;
+import com.fully.code.base.models.Question;
+import com.fully.code.base.persenters.BasePresenter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -14,7 +14,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class QuestionsPresenter implements BasePresenter {
@@ -73,6 +76,44 @@ public class QuestionsPresenter implements BasePresenter {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Question question = dataSnapshot.getValue(Question.class);
                     questions.add(question);
+                }
+
+                if (callback != null) {
+                    Collections.sort(questions, new Comparator<Question>() {
+                        @Override
+                        public int compare(Question o1, Question o2) {
+                            return o1.getCourseId().compareTo(o2.getCourseId());
+                        }
+                    });
+                    callback.onGetQuestionsComplete(questions);
+                    callback.onHideLoading();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                if (callback != null) {
+                    callback.onFailure("Unable to get message: " + databaseError.getMessage(), null);
+                    callback.onHideLoading();
+                }
+            }
+        };
+        reference.addListenerForSingleValueEvent(listener);
+    }
+
+    public void getQuestions(String... coursesIds) {
+        callback.onShowLoading();
+        List<String> ids = Arrays.asList(coursesIds);
+        listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                List<Question> questions = new ArrayList<>();
+
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Question question = dataSnapshot.getValue(Question.class);
+                    if (ids.contains(question.getCourseId())) {
+                        questions.add(question);
+                    }
                 }
 
                 if (callback != null) {

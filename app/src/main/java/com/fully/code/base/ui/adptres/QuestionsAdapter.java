@@ -1,4 +1,4 @@
-package com.getit.app.ui.adptres;
+package com.fully.code.base.ui.adptres;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,50 +6,50 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.fully.code.base.models.Question;
+import com.fully.code.base.models.User;
+import com.fully.code.base.utilities.UIUtils;
+import com.fully.code.base.utilities.helpers.StorageHelper;
 import com.getit.app.R;
 import com.getit.app.databinding.ItemQuestionBinding;
-import com.getit.app.models.Question;
-import com.getit.app.models.User;
-import com.getit.app.utilities.UIUtils;
-import com.getit.app.utilities.helpers.StorageHelper;
 
 import java.util.List;
 
 public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.ViewHolder> {
-    private List<Question> oldQuestions;
+    private List<Question> questions;
     private OnQuestionsClickListener listener;
     private User currentUser;
 
-    public QuestionsAdapter(List<Question> oldQuestions, OnQuestionsClickListener listener) {
-        this.oldQuestions = oldQuestions;
+    public QuestionsAdapter(List<Question> questions, OnQuestionsClickListener listener) {
+        this.questions = questions;
         this.listener = listener;
         this.currentUser = StorageHelper.getCurrentUser();
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_question, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_question_old, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Question oldQuestion = oldQuestions.get(position);
+        Question question = questions.get(position);
 
-        holder.binding.title.setText(oldQuestion.getTitle());
-        holder.binding.lesson.setText(oldQuestion.getLessonName());
-        holder.binding.description.setText(oldQuestion.getDescription());
-        holder.binding.description.setVisibility(oldQuestion.getDescription() != null && !oldQuestion.getDescription().isEmpty() ? View.VISIBLE : View.GONE);
-        holder.binding.type.setText(UIUtils.getQuestionType(oldQuestion.getType()));
+        holder.binding.title.setText(question.getTitle());
+        holder.binding.course.setText(question.getCourseName());
+        holder.binding.description.setText(question.getDescription());
+        holder.binding.description.setVisibility(question.getDescription() != null && !question.getDescription().isEmpty() ? View.VISIBLE : View.GONE);
+        holder.binding.type.setText(UIUtils.getQuestionType(question.getType()));
     }
 
     private int getSize(String id) {
-        return oldQuestions.size();
+        return questions.size();
     }
 
     // total number of rows
     @Override
     public int getItemCount() {
-        return oldQuestions.size();
+        return questions.size();
     }
 
     // stores and recycles views as they are scrolled off screen
