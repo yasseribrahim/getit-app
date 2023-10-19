@@ -18,6 +18,7 @@ import com.getit.app.Constants;
 import com.getit.app.R;
 import com.getit.app.databinding.ActivityHomeTeacherBinding;
 import com.getit.app.models.User;
+import com.getit.app.ui.fragments.GradesFragment;
 import com.getit.app.ui.fragments.HomeFragment;
 import com.getit.app.ui.fragments.MoreFragment;
 import com.getit.app.ui.fragments.UsersFragment;
@@ -54,13 +55,13 @@ public class HomeActivity extends AppCompatActivity {
                                     showFragment(HomeFragment.newInstance(), R.id.container);
                                     binding.content.toolbar.setTitle(R.string.menu_home);
                                     break;
-                                case R.id.nav_teachers:
-                                    showFragment(UsersFragment.newInstance(Constants.USER_TYPE_TEACHER), R.id.container);
-                                    binding.content.toolbar.setTitle(R.string.menu_teachers);
-                                    break;
                                 case R.id.nav_students:
                                     showFragment(UsersFragment.newInstance(Constants.USER_TYPE_STUDENT), R.id.container);
                                     binding.content.toolbar.setTitle(R.string.menu_students);
+                                    break;
+                                case R.id.nav_grades:
+                                    showFragment(GradesFragment.newInstance(), R.id.container);
+                                    binding.content.toolbar.setTitle(R.string.menu_grades);
                                     break;
                                 case R.id.nav_more:
                                     showFragment(MoreFragment.newInstance(), R.id.container);

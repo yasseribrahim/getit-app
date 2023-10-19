@@ -17,17 +17,9 @@
             android:icon="@drawable/ic_menu_students"
             android:title="@string/menu_students" />
         <item
-            android:id="@+id/nav_courses"
+            android:id="@+id/nav_grades"
             android:icon="@drawable/ic_menu_grades"
-            android:title="@string/menu_courses" />
-        <item
-            android:id="@+id/nav_questions"
-            android:icon="@drawable/ic_menu_question"
-            android:title="@string/menu_questions" />
-        <item
-            android:id="@+id/nav_exams"
-            android:icon="@drawable/ic_menu_exam"
-            android:title="@string/menu_exams" />
+            android:title="@string/menu_grades" />
     </group>
 
     <group android:checkableBehavior="single">

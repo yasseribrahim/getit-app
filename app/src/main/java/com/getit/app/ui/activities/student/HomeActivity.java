@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.getit.app.R;
 import com.getit.app.databinding.ActivityHomeStudentBinding;
 import com.getit.app.models.User;
+import com.getit.app.ui.fragments.GradesFragment;
 import com.getit.app.ui.fragments.HomeFragment;
 import com.getit.app.ui.fragments.MoreFragment;
 import com.getit.app.utilities.helpers.StorageHelper;
@@ -51,6 +52,10 @@ public class HomeActivity extends AppCompatActivity {
                                 case R.id.nav_home:
                                     showFragment(HomeFragment.newInstance(), R.id.container);
                                     binding.content.toolbar.setTitle(R.string.menu_home);
+                                    break;
+                                case R.id.nav_grades:
+                                    showFragment(GradesFragment.newInstance(), R.id.container);
+                                    binding.content.toolbar.setTitle(R.string.menu_grades);
                                     break;
                                 case R.id.nav_more:
                                     showFragment(MoreFragment.newInstance(), R.id.container);

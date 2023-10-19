@@ -9,13 +9,9 @@
             android:icon="@drawable/ic_menu_home"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_courses"
+            android:id="@+id/nav_grades"
             android:icon="@drawable/ic_menu_grades"
-            android:title="@string/menu_courses" />
-        <item
-            android:id="@+id/nav_exams"
-            android:icon="@drawable/ic_menu_exam"
-            android:title="@string/menu_exams" />
+            android:title="@string/menu_grades" />
     </group>
 
     <group android:checkableBehavior="single">
