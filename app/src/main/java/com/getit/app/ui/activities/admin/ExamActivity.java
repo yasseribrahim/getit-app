@@ -11,11 +11,11 @@ import com.getit.app.R;
 import com.getit.app.databinding.ActivityExamBinding;
 import com.getit.app.models.Course;
 import com.getit.app.models.Exam;
-import com.getit.app.models.Question;
+import com.getit.app.models.OldQuestion;
 import com.getit.app.persenters.exams.ExamsCallback;
 import com.getit.app.persenters.exams.ExamsPresenter;
-import com.getit.app.persenters.questions.QuestionsCallback;
-import com.getit.app.persenters.questions.QuestionsPresenter;
+import com.getit.app.persenters.oldquestions.QuestionsCallback;
+import com.getit.app.persenters.oldquestions.QuestionsPresenter;
 import com.getit.app.ui.activities.BaseActivity;
 import com.getit.app.ui.adptres.QuestionSelectorAdapter;
 import com.getit.app.ui.fragments.CourseSelectorBottomSheet;
@@ -23,16 +23,18 @@ import com.getit.app.ui.fragments.GradeSelectorBottomSheet;
 import com.getit.app.utilities.ToastUtils;
 import com.getit.app.utilities.UIUtils;
 import com.getit.app.utilities.helpers.LocaleHelper;
+import com.getit.app.utilities.helpers.StorageHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ExamActivity extends BaseActivity implements ExamsCallback, QuestionsCallback, CourseSelectorBottomSheet.ItemClickListener, GradeSelectorBottomSheet.ItemClickListener, QuestionSelectorAdapter.OnItemClickListener {
     private ActivityExamBinding binding;
     private ExamsPresenter presenter;
     private QuestionsPresenter questionsPresenter;
     private QuestionSelectorAdapter adapter;
-    private List<Question> questions;
+    private List<OldQuestion> oldQuestions, selectedOldQuestions;
     private Exam exam;
 
     @Override
@@ -69,9 +71,10 @@ public class ExamActivity extends BaseActivity implements ExamsCallback, Questio
             }
         });
 
-        questions = new ArrayList<>();
+        oldQuestions = new ArrayList<>();
+        selectedOldQuestions = new ArrayList<>();
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new QuestionSelectorAdapter(questions, this, exam.getQuestions());
+        adapter = new QuestionSelectorAdapter(oldQuestions, this, selectedOldQuestions);
         binding.recyclerView.setAdapter(adapter);
 
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +118,7 @@ public class ExamActivity extends BaseActivity implements ExamsCallback, Questio
                     binding.passScore.requestFocus();
                     return;
                 }
-                if (exam.getQuestions().isEmpty()) {
+                if (selectedOldQuestions.isEmpty()) {
                     ToastUtils.longToast(R.string.str_questions_list_hint);
                     return;
                 }
@@ -125,17 +128,27 @@ public class ExamActivity extends BaseActivity implements ExamsCallback, Questio
                 exam.setActive(binding.isActive.isChecked());
                 exam.setScoreTotal(totalScore);
                 exam.setScorePass(passScore);
+                exam.setCreatedBy(StorageHelper.getCurrentUser().getEmail());
+                exam.setQuestions(selectedOldQuestions);
                 presenter.save(exam);
             }
         });
     }
 
     @Override
-    public void onGetQuestionsComplete(List<Question> questions) {
-        exam.getQuestions().clear();
-        this.questions.clear();
-        this.questions.addAll(questions);
-        binding.emptyMessage.setVisibility(questions.isEmpty() ? View.VISIBLE : View.GONE);
+    public void onGetQuestionsComplete(List<OldQuestion> oldQuestions) {
+        this.selectedOldQuestions.clear();
+        this.oldQuestions.clear();
+        this.oldQuestions.addAll(oldQuestions);
+        exam.getQuestions().forEach(new Consumer<OldQuestion>() {
+            @Override
+            public void accept(OldQuestion oldQuestion) {
+                if (oldQuestions.contains(oldQuestion)) {
+                    selectedOldQuestions.add(oldQuestion);
+                }
+            }
+        });
+        binding.emptyMessage.setVisibility(oldQuestions.isEmpty() ? View.VISIBLE : View.GONE);
         adapter.notifyDataSetChanged();
     }
 

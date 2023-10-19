@@ -36,16 +36,15 @@
 
         <TextView
             android:id="@+id/type"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_weight="1"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/green"
             android:textStyle="bold"
-            tools:text="User Name" />
+            android:text="User Name" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <View style="@style/SeparateHorizontalView" />

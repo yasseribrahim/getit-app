@@ -23,6 +23,7 @@ import com.getit.app.persenters.user.UsersCallback;
 import com.getit.app.persenters.user.UsersPresenter;
 import com.getit.app.ui.activities.admin.UserActivity;
 import com.getit.app.ui.adptres.UsersAdapter;
+import com.getit.app.utilities.helpers.StorageHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,7 @@ public class UsersFragment extends Fragment implements UsersCallback, UsersAdapt
         presenter = new UsersPresenter(this);
         userType = getArguments().getInt(Constants.ARG_ID);
 
+        binding.btnAdd.setVisibility(StorageHelper.getCurrentUser().isAdmin() ? View.VISIBLE : View.GONE);
         binding.refreshLayout.setColorSchemeResources(R.color.refreshColor1, R.color.refreshColor2, R.color.refreshColor3, R.color.refreshColor4);
         binding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -91,7 +93,11 @@ public class UsersFragment extends Fragment implements UsersCallback, UsersAdapt
     }
 
     private void load() {
-        presenter.getUsers(userType);
+        if (StorageHelper.getCurrentUser().isAdmin()) {
+            presenter.getUsers(userType);
+        } else {
+            presenter.getUsers(userType, StorageHelper.getCurrentUser().getGrade());
+        }
     }
 
     @Override
@@ -173,9 +179,8 @@ public class UsersFragment extends Fragment implements UsersCallback, UsersAdapt
         if (position >= 0 && position < searchedUsers.size()) {
             User user = searchedUsers.get(position);
             int index = users.indexOf(user);
-            searchedUsers.remove(position);
             if (index >= 0 && index < users.size()) {
-                users.remove(position);
+                users.remove(index);
             }
 
             presenter.delete(user);
@@ -194,6 +199,7 @@ public class UsersFragment extends Fragment implements UsersCallback, UsersAdapt
     public void onDeleteUserComplete(User user) {
         int index = searchedUsers.indexOf(user);
         if(index != -1) {
+            searchedUsers.remove(index);
             usersAdapter.notifyItemRemoved(index);
         }
         Toast.makeText(getContext(), R.string.str_message_delete_successfully, Toast.LENGTH_LONG).show();

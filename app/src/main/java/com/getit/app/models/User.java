@@ -3,6 +3,8 @@ package com.getit.app.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.getit.app.Constants;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -135,6 +137,56 @@ public class User implements Parcelable {
 
     public List<ExamStudent> getExams() {
         return exams;
+    }
+
+    public boolean isStudent() {
+        return Constants.USER_TYPE_STUDENT == type;
+    }
+
+    public boolean isTeacher() {
+        return Constants.USER_TYPE_TEACHER == type;
+    }
+
+    public boolean isAdmin() {
+        return Constants.USER_TYPE_ADMIN == type;
+    }
+
+    public ExamStudent getExamStudent(Exam exam) {
+        if (exams == null) {
+            exams = new ArrayList<>();
+        }
+        int index = exams.indexOf(new ExamStudent(exam));
+        if (index != -1) {
+            return exams.get(index);
+        }
+        var examStudent = new ExamStudent(exam);
+        exams.add(examStudent);
+        return examStudent;
+    }
+
+    public Answer getAnswer(ExamStudent exam, OldQuestion oldQuestion) {
+        if (exam.getAnswers() == null) {
+            exam.setAnswers(new ArrayList<>());
+        }
+        int index = exam.getAnswers().indexOf(new Answer(oldQuestion));
+        if (index != -1) {
+            return exam.getAnswers().get(index);
+        }
+        var answer = new Answer(oldQuestion);
+        exam.getAnswers().add(answer);
+        return answer;
+    }
+
+    public void addExamStudent(ExamStudent exam) {
+        if (exams == null) {
+            exams = new ArrayList<>();
+        }
+        int index = exams.indexOf(new ExamStudent(exam.getExam()));
+        if (index != -1) {
+            exams.set(index, exam);
+        } else {
+            exams.add(exam);
+        }
     }
 
     @Override

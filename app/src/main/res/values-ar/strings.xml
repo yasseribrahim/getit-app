@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">GetIt</string>
+    <string name="str_welcome_message">مرحبا: %s</string>
     <string name="str_title_add_update">إضافة / تحديث</string>
     <string name="navigation_drawer_open">فتح درج التنقل</string>
     <string name="navigation_drawer_close">أغلق درج التنقل</string>
@@ -10,17 +11,27 @@
 
     <string name="menu_home">الصفحة الرئيسية</string>
     <string name="menu_teachers">المعلمون</string>
+    <string name="menu_grades">الصفوف</string>
+    <string name="menu_units">الوحدات</string>
+    <string name="menu_lessons">الدروس</string>
     <string name="menu_students">الطلاب</string>
     <string name="menu_courses">الدورات</string>
     <string name="menu_exams">الامتحانات</string>
     <string name="menu_questions">سؤال</string>
     <string name="menu_more">المزيد</string>
 
+    <string name="str_exam_list">قائمة الاختبارات</string>
+    <string name="str_exams_solved_list">الاختبارات المحلولة</string>
+
     <string name="str_course">دورة</string>
     <string name="str_course_hint">اختر الدورة</string>
     <string name="str_name">Name</string>
 
+    <string name="str_save_next">حفظ &amp; التالي</string>
+    <string name="str_back">الرجوع</string>
+    <string name="str_correction">تصحيح</string>
     <string name="str_save">حفظ</string>
+    <string name="str_finish">انهاء</string>
     <string name="str_enter_value">أدخل القيمة</string>
     <string name="str_invalid_entered_value">القيمة غير صالحة أو موجودة بالفعل</string>
     <string name="str_ok">نعم</string>
@@ -131,4 +142,9 @@
     <string name="str_course_header">حدد الدورة</string>
     <string name="str_choice_hint">أدخل الاختيار</string>
     <string name="str_is_right_answer">الاجابة الصحيحة</string>
+
+    <string name="str_choices">الاختيارات</string>
+    <string name="str_your_answer">إجابتك</string>
+    <string name="str_choices_hint">حدد الاختيار</string>
+    <string name="str_your_answer_hint">اكتب إجابتك</string>
 </resources>

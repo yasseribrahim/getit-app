@@ -10,58 +10,58 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.getit.app.R;
 import com.getit.app.databinding.ItemQuestionSelectorBinding;
-import com.getit.app.models.Question;
+import com.getit.app.models.OldQuestion;
 import com.getit.app.utilities.UIUtils;
 
 import java.util.List;
 
 public class QuestionSelectorAdapter extends RecyclerView.Adapter<QuestionSelectorAdapter.ViewHolder> {
-    private List<Question> questions;
+    private List<OldQuestion> oldQuestions;
     private OnItemClickListener listener;
-    private List<Question> selectedQuestions;
+    private List<OldQuestion> selectedOldQuestions;
 
     // data is passed into the constructor
-    public QuestionSelectorAdapter(List<Question> questions, OnItemClickListener listener, List<Question> selectedQuestions) {
-        this.questions = questions;
+    public QuestionSelectorAdapter(List<OldQuestion> oldQuestions, OnItemClickListener listener, List<OldQuestion> selectedOldQuestions) {
+        this.oldQuestions = oldQuestions;
         this.listener = listener;
-        this.selectedQuestions = selectedQuestions;
+        this.selectedOldQuestions = selectedOldQuestions;
     }
 
     // inflates the row layout from xml when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_course_selector, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_question_selector, parent, false);
         return new ViewHolder(view);
     }
 
-    public void handelSelectedCourses(Question question) {
-        if (selectedQuestions.contains(question)) {
-            selectedQuestions.remove(question);
+    public void handelSelectedCourses(OldQuestion oldQuestion) {
+        if (selectedOldQuestions.contains(oldQuestion)) {
+            selectedOldQuestions.remove(oldQuestion);
         } else {
-            selectedQuestions.add(question);
+            selectedOldQuestions.add(oldQuestion);
         }
         notifyDataSetChanged();
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Question question = questions.get(position);
+        OldQuestion oldQuestion = oldQuestions.get(position);
 
         Drawable drawable = null;
-        if (selectedQuestions.contains(question)) {
+        if (selectedOldQuestions.contains(oldQuestion)) {
             drawable = ResourcesCompat.getDrawable(holder.binding.check.getResources(), R.drawable.ic_check, null);
         } else {
             drawable = ResourcesCompat.getDrawable(holder.binding.check.getResources(), R.drawable.ic_unchecked, null);
         }
         holder.binding.check.setImageDrawable(drawable);
-        holder.binding.name.setText(question.getTitle());
-        holder.binding.type.setText(UIUtils.getQuestionType(question.getType()));
+        holder.binding.name.setText(oldQuestion.getTitle());
+        holder.binding.type.setText(UIUtils.getQuestionType(oldQuestion.getType()));
     }
 
     // total number of rows
     @Override
     public int getItemCount() {
-        return questions.size();
+        return oldQuestions.size();
     }
 
     // stores and recycles views as they are scrolled off screen
@@ -74,9 +74,9 @@ public class QuestionSelectorAdapter extends RecyclerView.Adapter<QuestionSelect
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getAdapterPosition() >= 0 && getAdapterPosition() < questions.size()) {
-                        handelSelectedCourses(questions.get(getAdapterPosition()));
+                    if (getAdapterPosition() >= 0 && getAdapterPosition() < oldQuestions.size()) {
                         if (listener != null) listener.onCourseClickListener(getAdapterPosition());
+                        handelSelectedCourses(oldQuestions.get(getAdapterPosition()));
                     }
                 }
             });

@@ -23,7 +23,9 @@
     <color name="background">#FFf9fafb</color>
     <color name="gray">#FFc6c6c6</color>
     <color name="red">#FFBE0000</color>
+    <color name="red_55">#55BE0000</color>
     <color name="green">#4E9F3D</color>
+    <color name="green_55">#554E9F3D</color>
     <color name="light_blue_600">#FF039BE5</color>
     <color name="border_color">#e2e2e2</color>
     <color name="black_light">#484848</color>

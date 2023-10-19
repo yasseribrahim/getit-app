@@ -3,7 +3,7 @@ package com.getit.app.models;
 import java.util.Objects;
 
 public class Answer {
-    private Question question;
+    private OldQuestion oldQuestion;
     private int selectedAnswerIndex;
     private String answer;
     private Boolean isRight;
@@ -11,19 +11,23 @@ public class Answer {
     public Answer() {
     }
 
-    public Answer(Question question, int selectedAnswerIndex, String answer, Boolean isRight) {
-        this.question = question;
+    public Answer(OldQuestion oldQuestion) {
+        this.oldQuestion = oldQuestion;
+    }
+
+    public Answer(OldQuestion oldQuestion, int selectedAnswerIndex, String answer, Boolean isRight) {
+        this.oldQuestion = oldQuestion;
         this.selectedAnswerIndex = selectedAnswerIndex;
         this.answer = answer;
         this.isRight = isRight;
     }
 
-    public Question getQuestion() {
-        return question;
+    public OldQuestion getQuestion() {
+        return oldQuestion;
     }
 
-    public void setQuestion(Question question) {
-        this.question = question;
+    public void setQuestion(OldQuestion oldQuestion) {
+        this.oldQuestion = oldQuestion;
     }
 
     public int getSelectedAnswerIndex() {
@@ -42,18 +46,18 @@ public class Answer {
         this.answer = answer;
     }
 
-    public Boolean getIsRight() {
+    public Boolean isRight() {
         return isRight;
     }
 
     public void setIsRight(Boolean isRight) {
         this.isRight = isRight;
     }
-    
+
     public void correct() {
-        if (question.isMultiChoices()) {
-            if (selectedAnswerIndex >= 0 && selectedAnswerIndex < question.getChoices().size()) {
-                QuestionChoice rightChoice = question.getChoices().get(selectedAnswerIndex);
+        if (oldQuestion.isMultiChoices()) {
+            if (selectedAnswerIndex >= 0 && selectedAnswerIndex < oldQuestion.getChoices().size()) {
+                QuestionChoice rightChoice = oldQuestion.getChoices().get(selectedAnswerIndex);
                 isRight = rightChoice.isCorrectAnswer();
             } else {
                 isRight = false;
@@ -68,18 +72,18 @@ public class Answer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Answer answer = (Answer) o;
-        return question.equals(answer.question);
+        return oldQuestion.equals(answer.oldQuestion);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(question);
+        return Objects.hash(oldQuestion);
     }
 
     @Override
     public String toString() {
         return "Answer{" +
-                "question=" + question +
+                "question=" + oldQuestion +
                 ", choice=" + selectedAnswerIndex +
                 ", answer='" + answer + '\'' +
                 ", isRight=" + isRight +

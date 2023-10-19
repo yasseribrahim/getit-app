@@ -20,7 +20,6 @@ import com.getit.app.utilities.ToastUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CourseSelectorBottomSheet extends BottomSheetDialogFragment implements CoursesCallback, CoursesSelectorAdapter.OnItemClickListener {
@@ -56,7 +55,9 @@ public class CourseSelectorBottomSheet extends BottomSheetDialogFragment impleme
         super.onViewCreated(view, savedInstanceState);
         courses = new ArrayList<>();
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new CoursesSelectorAdapter(courses, this, Arrays.asList(new Course(selectedCourse)));
+        List<Course> selectedCourses = new ArrayList<>();
+        selectedCourses.add(new Course(selectedCourse));
+        adapter = new CoursesSelectorAdapter(courses, this, selectedCourses);
         binding.recyclerView.setAdapter(adapter);
         if (selectedGrade > 0) {
             presenter.getCourses(selectedGrade);
@@ -104,8 +105,7 @@ public class CourseSelectorBottomSheet extends BottomSheetDialogFragment impleme
     }
 
     @Override
-    public void onCourseClickListener(int position) {
-        Course course = courses.get(position);
+    public void onCourseClickListener(Course course) {
         listener.onCourseClick(course);
         dismiss();
     }

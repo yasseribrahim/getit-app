@@ -21,8 +21,10 @@ import com.getit.app.databinding.FragmentCoursesBinding;
 import com.getit.app.models.Course;
 import com.getit.app.persenters.courses.CoursesCallback;
 import com.getit.app.persenters.courses.CoursesPresenter;
+import com.getit.app.ui.activities.CourseDetailsActivity;
 import com.getit.app.ui.activities.admin.CourseActivity;
 import com.getit.app.ui.adptres.CoursesAdapter;
+import com.getit.app.utilities.helpers.StorageHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,7 @@ public class CoursesFragment extends Fragment implements CoursesCallback, Course
 
         presenter = new CoursesPresenter(this);
 
+        binding.btnAdd.setVisibility(StorageHelper.getCurrentUser().isAdmin() ? View.VISIBLE : View.GONE);
         binding.refreshLayout.setColorSchemeResources(R.color.refreshColor1, R.color.refreshColor2, R.color.refreshColor3, R.color.refreshColor4);
         binding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -88,7 +91,11 @@ public class CoursesFragment extends Fragment implements CoursesCallback, Course
     }
 
     private void load() {
-        presenter.getCourses();
+        if(StorageHelper.getCurrentUser().isAdmin()) {
+            presenter.getCourses();
+        } else {
+            presenter.getCourses(StorageHelper.getCurrentUser().getGrade());
+        }
     }
 
     @Override
@@ -165,6 +172,9 @@ public class CoursesFragment extends Fragment implements CoursesCallback, Course
     @Override
     public void onItemViewListener(int position) {
         Course course = searchedCourses.get(position);
+        Intent intent = new Intent(getContext(), CourseDetailsActivity.class);
+        intent.putExtra(Constants.ARG_OBJECT, course);
+        startActivity(intent);
     }
 
     @Override
@@ -172,9 +182,8 @@ public class CoursesFragment extends Fragment implements CoursesCallback, Course
         if (position >= 0 && position < searchedCourses.size()) {
             Course course = searchedCourses.get(position);
             int index = courses.indexOf(course);
-            searchedCourses.remove(position);
             if (index >= 0 && index < courses.size()) {
-                courses.remove(position);
+                courses.remove(index);
             }
 
             presenter.delete(course);
@@ -193,6 +202,7 @@ public class CoursesFragment extends Fragment implements CoursesCallback, Course
     public void onDeleteCourseComplete(Course course) {
         int index = searchedCourses.indexOf(course);
         if(index != -1) {
+            searchedCourses.remove(index);
             adapter.notifyItemRemoved(index);
         }
         Toast.makeText(getContext(), R.string.str_message_delete_successfully, Toast.LENGTH_LONG).show();

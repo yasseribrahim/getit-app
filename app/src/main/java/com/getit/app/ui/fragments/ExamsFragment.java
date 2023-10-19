@@ -23,6 +23,7 @@ import com.getit.app.persenters.exams.ExamsCallback;
 import com.getit.app.persenters.exams.ExamsPresenter;
 import com.getit.app.ui.activities.admin.ExamActivity;
 import com.getit.app.ui.adptres.ExamsAdapter;
+import com.getit.app.utilities.helpers.StorageHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,7 @@ public class ExamsFragment extends Fragment implements ExamsCallback, ExamsAdapt
 
         presenter = new ExamsPresenter(this);
 
+        binding.btnAdd.setVisibility(StorageHelper.getCurrentUser().isAdmin() ? View.VISIBLE : View.GONE);
         binding.refreshLayout.setColorSchemeResources(R.color.refreshColor1, R.color.refreshColor2, R.color.refreshColor3, R.color.refreshColor4);
         binding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -88,7 +90,11 @@ public class ExamsFragment extends Fragment implements ExamsCallback, ExamsAdapt
     }
 
     private void load() {
-        presenter.getExams();
+        if(StorageHelper.getCurrentUser().isAdmin()) {
+            presenter.getExams();
+        } else {
+            presenter.getExams(StorageHelper.getCurrentUser().getGrade());
+        }
     }
 
     @Override
@@ -158,8 +164,8 @@ public class ExamsFragment extends Fragment implements ExamsCallback, ExamsAdapt
     }
 
     @Override
-    public void onExamViewListener(int position) {
-        Exam user = searchedExams.get(position);
+    public void onExamViewListener(Exam exam) {
+
     }
 
     @Override
@@ -167,9 +173,8 @@ public class ExamsFragment extends Fragment implements ExamsCallback, ExamsAdapt
         if (position >= 0 && position < searchedExams.size()) {
             Exam exam = searchedExams.get(position);
             int index = exams.indexOf(exam);
-            searchedExams.remove(position);
             if (index >= 0 && index < exams.size()) {
-                exams.remove(position);
+                exams.remove(index);
             }
 
             presenter.delete(exam);
@@ -188,6 +193,7 @@ public class ExamsFragment extends Fragment implements ExamsCallback, ExamsAdapt
     public void onDeleteExamComplete(Exam question) {
         int index = searchedExams.indexOf(question);
         if (index != -1) {
+            searchedExams.remove(index);
             adapter.notifyItemRemoved(index);
         }
         Toast.makeText(getContext(), R.string.str_message_delete_successfully, Toast.LENGTH_LONG).show();

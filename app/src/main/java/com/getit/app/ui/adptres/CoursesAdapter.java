@@ -9,18 +9,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.getit.app.R;
 import com.getit.app.databinding.ItemCourseBinding;
 import com.getit.app.models.Course;
+import com.getit.app.models.User;
 import com.getit.app.utilities.DatesUtils;
 import com.getit.app.utilities.UIUtils;
+import com.getit.app.utilities.helpers.StorageHelper;
 
 import java.util.List;
 
 public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.ViewHolder> {
     private List<Course> courses;
     private OnItemClickListener listener;
+    private User currentUser;
 
     public CoursesAdapter(List<Course> courses, OnItemClickListener listener) {
         this.courses = courses;
         this.listener = listener;
+        this.currentUser = StorageHelper.getCurrentUser();
     }
 
     @Override
@@ -51,6 +55,7 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.ViewHold
         ViewHolder(View view) {
             super(view);
             binding = ItemCourseBinding.bind(view);
+            binding.containerActions.setVisibility(currentUser.isAdmin() ? View.VISIBLE : View.GONE);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

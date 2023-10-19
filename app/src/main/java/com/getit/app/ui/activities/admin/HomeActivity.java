@@ -16,10 +16,11 @@ import androidx.fragment.app.FragmentTransaction;
 import com.bumptech.glide.Glide;
 import com.getit.app.Constants;
 import com.getit.app.R;
-import com.getit.app.databinding.ActivityHomeBinding;
+import com.getit.app.databinding.ActivityHomeAdminBinding;
 import com.getit.app.models.User;
 import com.getit.app.ui.fragments.CoursesFragment;
 import com.getit.app.ui.fragments.ExamsFragment;
+import com.getit.app.ui.fragments.GradesFragment;
 import com.getit.app.ui.fragments.HomeFragment;
 import com.getit.app.ui.fragments.MoreFragment;
 import com.getit.app.ui.fragments.QuestionsFragment;
@@ -30,16 +31,15 @@ import com.google.android.material.navigation.NavigationView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeActivity extends AppCompatActivity {
-    private ActivityHomeBinding binding;
+    private ActivityHomeAdminBinding binding;
     private MenuItem previousItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityHomeBinding.inflate(getLayoutInflater());
+        binding = ActivityHomeAdminBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         setUpActionBar();
         setupNavDrawer();
     }
@@ -61,6 +61,10 @@ public class HomeActivity extends AppCompatActivity {
                                 case R.id.nav_teachers:
                                     showFragment(UsersFragment.newInstance(Constants.USER_TYPE_TEACHER), R.id.container);
                                     binding.content.toolbar.setTitle(R.string.menu_teachers);
+                                    break;
+                                case R.id.nav_grades:
+                                    showFragment(GradesFragment.newInstance(), R.id.container);
+                                    binding.content.toolbar.setTitle(R.string.menu_grades);
                                     break;
                                 case R.id.nav_students:
                                     showFragment(UsersFragment.newInstance(Constants.USER_TYPE_STUDENT), R.id.container);

@@ -6,24 +6,25 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.getit.app.ui.activities.admin.HomeActivity;
-import com.getit.app.utilities.ToastUtils;
-import com.google.firebase.auth.FirebaseAuth;
 import com.getit.app.Constants;
 import com.getit.app.CustomApplication;
-import com.getit.app.ui.fragments.ProgressDialogFragment;
-import com.getit.app.utilities.helpers.LocaleHelper;
-import com.getit.app.utilities.helpers.StorageHelper;
 import com.getit.app.models.User;
 import com.getit.app.persenters.firebase.FirebaseCallback;
 import com.getit.app.persenters.firebase.FirebasePresenter;
+import com.getit.app.ui.fragments.ProgressDialogFragment;
+import com.getit.app.utilities.ToastUtils;
+import com.getit.app.utilities.helpers.LocaleHelper;
+import com.getit.app.utilities.helpers.StorageHelper;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Locale;
 
@@ -34,6 +35,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkFirebase();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home -> finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     protected void checkFirebase() {
@@ -93,15 +103,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LoginActivity.class);
         if (user != null) {
             switch (user.getType()) {
-                case Constants.USER_TYPE_ADMIN:
-                    intent = new Intent(this, HomeActivity.class);
-                    break;
-                case Constants.USER_TYPE_TEACHER:
-//                    intent = new Intent(this, com.gps.children.tracker.app.activities.users.child.HomeActivity.class);
-                    break;
-                default:
-                    Toast.makeText(this, "This user not support from app, Please contact with admin", Toast.LENGTH_LONG).show();
-                    break;
+                case Constants.USER_TYPE_ADMIN ->
+                        intent = new Intent(this, com.getit.app.ui.activities.admin.HomeActivity.class);
+                case Constants.USER_TYPE_TEACHER ->
+                        intent = new Intent(this, com.getit.app.ui.activities.teacher.HomeActivity.class);
+                case Constants.USER_TYPE_STUDENT ->
+                        intent = new Intent(this, com.getit.app.ui.activities.student.HomeActivity.class);
+                default ->
+                        Toast.makeText(this, "This user not support from app, Please contact with admin", Toast.LENGTH_LONG).show();
             }
         }
         startActivity(intent);

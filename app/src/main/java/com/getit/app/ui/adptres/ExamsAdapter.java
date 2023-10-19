@@ -9,22 +9,26 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.getit.app.R;
 import com.getit.app.databinding.ItemExamBinding;
 import com.getit.app.models.Exam;
+import com.getit.app.models.User;
 import com.getit.app.utilities.DatesUtils;
 import com.getit.app.utilities.UIUtils;
+import com.getit.app.utilities.helpers.StorageHelper;
 
 import java.util.List;
 
 public class ExamsAdapter extends RecyclerView.Adapter<ExamsAdapter.ViewHolder> {
     private List<Exam> exams;
     private OnExamsClickListener listener;
+    private User currentUser;
 
     public ExamsAdapter(List<Exam> exams, OnExamsClickListener listener) {
         this.exams = exams;
         this.listener = listener;
+        this.currentUser = StorageHelper.getCurrentUser();
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_question, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_exam, parent, false);
         return new ViewHolder(view);
     }
 
@@ -58,10 +62,12 @@ public class ExamsAdapter extends RecyclerView.Adapter<ExamsAdapter.ViewHolder> 
         ViewHolder(View view) {
             super(view);
             binding = ItemExamBinding.bind(view);
+            binding.containerActions.setVisibility(currentUser.isAdmin() ? View.VISIBLE : View.GONE);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (listener != null) listener.onExamViewListener(getAdapterPosition());
+                    if (listener != null)
+                        listener.onExamViewListener(exams.get(getAdapterPosition()));
                 }
             });
             binding.containerRemove.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +87,7 @@ public class ExamsAdapter extends RecyclerView.Adapter<ExamsAdapter.ViewHolder> 
     }
 
     public interface OnExamsClickListener {
-        void onExamViewListener(int position);
+        void onExamViewListener(Exam exam);
 
         void onExamEditListener(int position);
 

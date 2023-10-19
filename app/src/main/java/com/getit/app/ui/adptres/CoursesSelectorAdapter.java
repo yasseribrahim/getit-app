@@ -75,8 +75,8 @@ public class CoursesSelectorAdapter extends RecyclerView.Adapter<CoursesSelector
                 @Override
                 public void onClick(View v) {
                     if (getAdapterPosition() >= 0 && getAdapterPosition() < courses.size()) {
+                        if (listener != null) listener.onCourseClickListener(courses.get(getAdapterPosition()));
                         handelSelectedCourses(courses.get(getAdapterPosition()));
-                        if (listener != null) listener.onCourseClickListener(getAdapterPosition());
                     }
                 }
             });
@@ -84,6 +84,6 @@ public class CoursesSelectorAdapter extends RecyclerView.Adapter<CoursesSelector
     }
 
     public interface OnItemClickListener {
-        void onCourseClickListener(int position);
+        void onCourseClickListener(Course course);
     }
 }

@@ -3,6 +3,7 @@ package com.getit.app.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +21,7 @@ public class Exam implements Parcelable {
     private String courseName;
     private String createdBy;
     private boolean isActive;
-    private List<Question> questions;
+    private List<OldQuestion> oldQuestions;
 
     public Exam() {
         this(null, null, null, Calendar.getInstance().getTime(), 0, 0, 0, null, null, null);
@@ -38,6 +39,7 @@ public class Exam implements Parcelable {
         this.courseName = courseName;
         this.createdBy = createdBy;
         this.isActive = true;
+        this.oldQuestions = new ArrayList<>();
     }
 
     public String getId() {
@@ -104,12 +106,12 @@ public class Exam implements Parcelable {
         this.createdBy = createdBy;
     }
 
-    public List<Question> getQuestions() {
-        return questions;
+    public List<OldQuestion> getQuestions() {
+        return oldQuestions;
     }
 
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
+    public void setQuestions(List<OldQuestion> oldQuestions) {
+        this.oldQuestions = oldQuestions;
     }
 
     public void setActive(boolean active) {
@@ -163,7 +165,7 @@ public class Exam implements Parcelable {
                 ", courseName='" + courseName + '\'' +
                 ", createdBy='" + createdBy + '\'' +
                 ", isActive=" + isActive +
-                ", questions=" + questions +
+                ", questions=" + oldQuestions +
                 '}';
     }
 
@@ -185,7 +187,7 @@ public class Exam implements Parcelable {
         dest.writeString(this.courseName);
         dest.writeString(this.createdBy);
         dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
-        dest.writeTypedList(this.questions);
+        dest.writeTypedList(this.oldQuestions);
     }
 
     public void readFromParcel(Parcel source) {
@@ -201,7 +203,7 @@ public class Exam implements Parcelable {
         this.courseName = source.readString();
         this.createdBy = source.readString();
         this.isActive = source.readByte() != 0;
-        this.questions = source.createTypedArrayList(Question.CREATOR);
+        this.oldQuestions = source.createTypedArrayList(OldQuestion.CREATOR);
     }
 
     protected Exam(Parcel in) {
@@ -217,7 +219,7 @@ public class Exam implements Parcelable {
         this.courseName = in.readString();
         this.createdBy = in.readString();
         this.isActive = in.readByte() != 0;
-        this.questions = in.createTypedArrayList(Question.CREATOR);
+        this.oldQuestions = in.createTypedArrayList(OldQuestion.CREATOR);
     }
 
     public static final Parcelable.Creator<Exam> CREATOR = new Parcelable.Creator<Exam>() {

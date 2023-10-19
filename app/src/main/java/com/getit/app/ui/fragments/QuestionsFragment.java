@@ -18,20 +18,26 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.getit.app.Constants;
 import com.getit.app.R;
 import com.getit.app.databinding.FragmentQuestonsBinding;
-import com.getit.app.models.Question;
-import com.getit.app.persenters.questions.QuestionsCallback;
-import com.getit.app.persenters.questions.QuestionsPresenter;
+import com.getit.app.models.Course;
+import com.getit.app.models.OldQuestion;
+import com.getit.app.persenters.courses.CoursesCallback;
+import com.getit.app.persenters.courses.CoursesPresenter;
+import com.getit.app.persenters.oldquestions.QuestionsCallback;
+import com.getit.app.persenters.oldquestions.QuestionsPresenter;
 import com.getit.app.ui.activities.admin.QuestionActivity;
-import com.getit.app.ui.adptres.QuestionsAdapter;
+import com.getit.app.ui.adptres.OldQuestionsAdapter;
+import com.getit.app.utilities.helpers.StorageHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
-public class QuestionsFragment extends Fragment implements QuestionsCallback, QuestionsAdapter.OnQuestionsClickListener {
+public class QuestionsFragment extends Fragment implements QuestionsCallback, CoursesCallback, OldQuestionsAdapter.OnQuestionsClickListener {
     private FragmentQuestonsBinding binding;
     private QuestionsPresenter presenter;
-    private QuestionsAdapter adapter;
-    private List<Question> questions, searchedQuestions;
+    private CoursesPresenter coursesPresenter;
+    private OldQuestionsAdapter adapter;
+    private List<OldQuestion> oldQuestions, searchedOldQuestions;
 
     public static QuestionsFragment newInstance() {
         Bundle args = new Bundle();
@@ -45,7 +51,9 @@ public class QuestionsFragment extends Fragment implements QuestionsCallback, Qu
         binding = FragmentQuestonsBinding.inflate(inflater);
 
         presenter = new QuestionsPresenter(this);
+        coursesPresenter = new CoursesPresenter(this);
 
+        binding.btnAdd.setVisibility(StorageHelper.getCurrentUser().isAdmin() ? View.VISIBLE : View.GONE);
         binding.refreshLayout.setColorSchemeResources(R.color.refreshColor1, R.color.refreshColor2, R.color.refreshColor3, R.color.refreshColor4);
         binding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -78,17 +86,34 @@ public class QuestionsFragment extends Fragment implements QuestionsCallback, Qu
             }
         });
 
-        questions = new ArrayList<>();
-        searchedQuestions = new ArrayList<>();
+        oldQuestions = new ArrayList<>();
+        searchedOldQuestions = new ArrayList<>();
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new QuestionsAdapter(searchedQuestions, this);
+        adapter = new OldQuestionsAdapter(searchedOldQuestions, this);
         binding.recyclerView.setAdapter(adapter);
 
         return binding.getRoot();
     }
 
     private void load() {
-        presenter.getQuestions();
+        if (StorageHelper.getCurrentUser().isAdmin()) {
+            presenter.getQuestions();
+        } else {
+            coursesPresenter.getCourses(StorageHelper.getCurrentUser().getGrade());
+        }
+    }
+
+    @Override
+    public void onGetCoursesComplete(List<Course> courses) {
+        List<String> coursesIds = new ArrayList<>();
+        courses.forEach(new Consumer<Course>() {
+            @Override
+            public void accept(Course course) {
+                coursesIds.add(course.getId());
+            }
+        });
+
+        presenter.getQuestions(coursesIds.toArray(new String[]{}));
     }
 
     @Override
@@ -106,9 +131,9 @@ public class QuestionsFragment extends Fragment implements QuestionsCallback, Qu
     }
 
     @Override
-    public void onGetQuestionsComplete(List<Question> users) {
-        this.questions.clear();
-        this.questions.addAll(users);
+    public void onGetQuestionsComplete(List<OldQuestion> users) {
+        this.oldQuestions.clear();
+        this.oldQuestions.addAll(users);
         search(binding.textSearch.getText().toString());
     }
 
@@ -128,31 +153,31 @@ public class QuestionsFragment extends Fragment implements QuestionsCallback, Qu
     }
 
     private void search(String searchedText) {
-        searchedQuestions.clear();
+        searchedOldQuestions.clear();
         if (!searchedText.isEmpty()) {
-            for (Question user : questions) {
+            for (OldQuestion user : oldQuestions) {
                 if (isMatched(user, searchedText)) {
-                    searchedQuestions.add(user);
+                    searchedOldQuestions.add(user);
                 }
             }
         } else {
-            searchedQuestions.addAll(questions);
+            searchedOldQuestions.addAll(oldQuestions);
         }
 
         refresh();
     }
 
-    private boolean isMatched(Question question, String text) {
+    private boolean isMatched(OldQuestion oldQuestion, String text) {
         String searchedText = text.toLowerCase();
-        boolean result = question.getTitle().toLowerCase().contains(searchedText) ||
-                (question.getDescription() != null && question.getDescription().toLowerCase().contains(searchedText)) ||
-                (question.getCourseName() != null && question.getCourseName().toLowerCase().contains(searchedText));
+        boolean result = oldQuestion.getTitle().toLowerCase().contains(searchedText) ||
+                (oldQuestion.getDescription() != null && oldQuestion.getDescription().toLowerCase().contains(searchedText)) ||
+                (oldQuestion.getCourseName() != null && oldQuestion.getCourseName().toLowerCase().contains(searchedText));
         return result;
     }
 
     private void refresh() {
         binding.message.setVisibility(View.GONE);
-        if (searchedQuestions.isEmpty()) {
+        if (searchedOldQuestions.isEmpty()) {
             binding.message.setVisibility(View.VISIBLE);
         }
 
@@ -161,43 +186,43 @@ public class QuestionsFragment extends Fragment implements QuestionsCallback, Qu
 
     @Override
     public void onQuestionViewListener(int position) {
-        Question user = searchedQuestions.get(position);
+        OldQuestion user = searchedOldQuestions.get(position);
     }
 
     @Override
     public void onQuestionDeleteListener(int position) {
-        if (position >= 0 && position < searchedQuestions.size()) {
-            Question question = searchedQuestions.get(position);
-            int index = questions.indexOf(question);
-            searchedQuestions.remove(position);
-            if (index >= 0 && index < questions.size()) {
-                questions.remove(position);
+        if (position >= 0 && position < searchedOldQuestions.size()) {
+            OldQuestion oldQuestion = searchedOldQuestions.get(position);
+            int index = oldQuestions.indexOf(oldQuestion);
+            if (index >= 0 && index < oldQuestions.size()) {
+                oldQuestions.remove(index);
             }
 
-            presenter.delete(question);
+            presenter.delete(oldQuestion);
         }
     }
 
     @Override
     public void onQuestionEditListener(int position) {
-        if (position >= 0 && position < searchedQuestions.size()) {
-            Question user = searchedQuestions.get(position);
+        if (position >= 0 && position < searchedOldQuestions.size()) {
+            OldQuestion user = searchedOldQuestions.get(position);
             openQuestionActivity(user);
         }
     }
 
     @Override
-    public void onDeleteQuestionComplete(Question question) {
-        int index = searchedQuestions.indexOf(question);
-        if(index != -1) {
+    public void onDeleteQuestionComplete(OldQuestion oldQuestion) {
+        int index = searchedOldQuestions.indexOf(oldQuestion);
+        if (index != -1) {
+            searchedOldQuestions.remove(index);
             adapter.notifyItemRemoved(index);
         }
         Toast.makeText(getContext(), R.string.str_message_delete_successfully, Toast.LENGTH_LONG).show();
     }
 
-    private void openQuestionActivity(Question question) {
+    private void openQuestionActivity(OldQuestion oldQuestion) {
         Intent intent = new Intent(getContext(), QuestionActivity.class);
-        intent.putExtra(Constants.ARG_OBJECT, question);
+        intent.putExtra(Constants.ARG_OBJECT, oldQuestion);
         startActivity(intent);
     }
 }
