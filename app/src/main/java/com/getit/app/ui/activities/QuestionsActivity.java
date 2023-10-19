@@ -99,12 +99,12 @@ public class QuestionsActivity extends BaseActivity implements QuestionsCallback
         }
     }
 
-    @Override
-    public void onGetQuestionsComplete(List<Question> users) {
-        this.questions.clear();
-        this.questions.addAll(users);
-        search(binding.textSearch.getText().toString());
-    }
+//    @Override
+//    public void onGetQuestionsComplete(List<Question> users) {
+//        this.questions.clear();
+//        this.questions.addAll(users);
+//        search(binding.textSearch.getText().toString());
+//    }
 
     @Override
     public void onShowLoading() {
@@ -167,7 +167,7 @@ public class QuestionsActivity extends BaseActivity implements QuestionsCallback
                 questions.remove(index);
             }
 
-            presenter.delete(question);
+           // presenter.delete(question);
         }
     }
 
@@ -179,15 +179,15 @@ public class QuestionsActivity extends BaseActivity implements QuestionsCallback
         }
     }
 
-    @Override
-    public void onDeleteQuestionComplete(Question Question) {
-        int index = searchedQuestions.indexOf(Question);
-        if (index != -1) {
-            searchedQuestions.remove(index);
-            adapter.notifyItemRemoved(index);
-        }
-        Toast.makeText(this, R.string.str_message_delete_successfully, Toast.LENGTH_LONG).show();
-    }
+//    @Override
+//    public void onDeleteQuestionComplete(Question Question) {
+//        int index = searchedQuestions.indexOf(Question);
+//        if (index != -1) {
+//            searchedQuestions.remove(index);
+//            adapter.notifyItemRemoved(index);
+//        }
+//        Toast.makeText(this, R.string.str_message_delete_successfully, Toast.LENGTH_LONG).show();
+//    }
 
     private void openQuestionActivity(Question Question) {
         Intent intent = new Intent(this, QuestionActivity.class);
