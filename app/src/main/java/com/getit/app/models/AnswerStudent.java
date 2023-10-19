@@ -4,27 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ExamStudent {
-    private Exam exam;
+public class AnswerStudent {
+    private String lessonId;
     private List<Answer> answers;
     private boolean finished;
 
-    public ExamStudent() {
+    public AnswerStudent() {
         this(null);
     }
 
-    public ExamStudent(Exam exam) {
-        this.exam = exam;
+    public AnswerStudent(String lessonId) {
+        this.lessonId = lessonId;
         this.answers = new ArrayList<>();
         this.finished = false;
     }
 
-    public Exam getExam() {
-        return exam;
+    public String getLessonId() {
+        return lessonId;
     }
 
-    public void setExam(Exam exam) {
-        this.exam = exam;
+    public void setLessonId(String lessonId) {
+        this.lessonId = lessonId;
     }
 
     public List<Answer> getAnswers() {
@@ -47,19 +47,19 @@ public class ExamStudent {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ExamStudent that = (ExamStudent) o;
-        return exam.equals(that.exam);
+        AnswerStudent that = (AnswerStudent) o;
+        return lessonId.equals(that.lessonId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(exam);
+        return Objects.hash(lessonId);
     }
 
     @Override
     public String toString() {
         return "ExamStudent{" +
-                "exam=" + exam +
+                "lessonId=" + lessonId +
                 ", answers=" + answers +
                 '}';
     }

@@ -1,6 +1,5 @@
 package com.getit.app.ui.activities.admin;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -13,11 +12,10 @@ import com.getit.app.models.User;
 import com.getit.app.persenters.user.UsersCallback;
 import com.getit.app.persenters.user.UsersPresenter;
 import com.getit.app.ui.activities.BaseActivity;
-import com.getit.app.ui.fragments.GradeSelectorBottomSheet;
 import com.getit.app.utilities.UIUtils;
 import com.getit.app.utilities.helpers.LocaleHelper;
 
-public class UserActivity extends BaseActivity implements UsersCallback, GradeSelectorBottomSheet.ItemClickListener {
+public class UserActivity extends BaseActivity implements UsersCallback {
     private ActivityUserBinding binding;
 
     private UsersPresenter presenter;
@@ -32,7 +30,7 @@ public class UserActivity extends BaseActivity implements UsersCallback, GradeSe
 
         presenter = new UsersPresenter(this);
 
-        if(getIntent().getExtras().containsKey(Constants.ARG_OBJECT)) {
+        if (getIntent().getExtras().containsKey(Constants.ARG_OBJECT)) {
             user = getIntent().getParcelableExtra(Constants.ARG_OBJECT);
         } else {
             user = new User();
@@ -40,13 +38,6 @@ public class UserActivity extends BaseActivity implements UsersCallback, GradeSe
             user.setType(userType);
         }
         bind();
-
-        binding.grade.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GradeSelectorBottomSheet.newInstance(user.getGrade()).show(getSupportFragmentManager(), "");
-            }
-        });
 
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,11 +82,6 @@ public class UserActivity extends BaseActivity implements UsersCallback, GradeSe
                     binding.address.requestFocus();
                     return;
                 }
-                if (user.getGrade() <= 0) {
-                    binding.grade.setError(getString(R.string.str_grade_invalid));
-                    binding.grade.requestFocus();
-                    return;
-                }
 
                 user.setUsername(username);
                 user.setPassword(password);
@@ -103,7 +89,7 @@ public class UserActivity extends BaseActivity implements UsersCallback, GradeSe
                 user.setPhone(phone);
                 user.setAddress(address);
 
-                if(user.getId() == null) {
+                if (user.getId() == null) {
                     presenter.signup(user);
                 } else {
                     presenter.save(user);
@@ -134,12 +120,6 @@ public class UserActivity extends BaseActivity implements UsersCallback, GradeSe
         Toast.makeText(this, getString(R.string.str_save_fail, message), Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public void onGradeClick(int id) {
-        user.setGrade(id);
-        binding.grade.setText(UIUtils.getGrade(id));
-    }
-
     private void bind() {
         binding.type.setText(UIUtils.getAccountType(user.getType()));
         binding.username.setEnabled(user.getId() == null);
@@ -150,6 +130,5 @@ public class UserActivity extends BaseActivity implements UsersCallback, GradeSe
         binding.fullName.setText(user.getFullName());
         binding.address.setText(user.getAddress());
         binding.phone.setText(user.getPhone());
-        binding.grade.setText(UIUtils.getGrade(user.getGrade()));
     }
 }

@@ -5,9 +5,6 @@ import android.os.Parcelable;
 
 import com.getit.app.Constants;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class User implements Parcelable {
     private String id;
     private String username;
@@ -18,26 +15,24 @@ public class User implements Parcelable {
     private String address;
     private String imageProfile;
     private int type;
-    private int grade;
-    private List<ExamStudent> exams;
 
     public User() {
-        this(null, null, null, null, null, null, null, null, 0, 0);
+        this(null, null, null, null, null, null, null, null, 0);
     }
 
     public User(String id) {
-        this(id, null, null, null, null, null, null, null, 0, 0);
+        this(id, null, null, null, null, null, null, null, 0);
     }
 
     public User(String username, String password) {
-        this(null, username, password, null, null, username, null, null, 0, 0);
+        this(null, username, password, null, null, username, null, null, 0);
     }
 
     public User(String username, String password, String fullName, String phone) {
-        this(null, username, password, fullName, phone, username, null, null, 0, 0);
+        this(null, username, password, fullName, phone, username, null, null, 0);
     }
 
-    public User(String id, String username, String password, String fullName, String phone, String email, String address, String imageProfile, int type, int grade) {
+    public User(String id, String username, String password, String fullName, String phone, String email, String address, String imageProfile, int type) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -47,8 +42,6 @@ public class User implements Parcelable {
         this.address = address;
         this.imageProfile = imageProfile;
         this.type = type;
-        this.grade = grade;
-        this.exams = new ArrayList<>();
     }
 
     public String getId() {
@@ -123,22 +116,6 @@ public class User implements Parcelable {
         this.email = email;
     }
 
-    public int getGrade() {
-        return grade;
-    }
-
-    public void setExams(List<ExamStudent> exams) {
-        this.exams = exams;
-    }
-
-    public void setGrade(int grade) {
-        this.grade = grade;
-    }
-
-    public List<ExamStudent> getExams() {
-        return exams;
-    }
-
     public boolean isStudent() {
         return Constants.USER_TYPE_STUDENT == type;
     }
@@ -149,44 +126,6 @@ public class User implements Parcelable {
 
     public boolean isAdmin() {
         return Constants.USER_TYPE_ADMIN == type;
-    }
-
-    public ExamStudent getExamStudent(Exam exam) {
-        if (exams == null) {
-            exams = new ArrayList<>();
-        }
-        int index = exams.indexOf(new ExamStudent(exam));
-        if (index != -1) {
-            return exams.get(index);
-        }
-        var examStudent = new ExamStudent(exam);
-        exams.add(examStudent);
-        return examStudent;
-    }
-
-    public Answer getAnswer(ExamStudent exam, OldQuestion oldQuestion) {
-        if (exam.getAnswers() == null) {
-            exam.setAnswers(new ArrayList<>());
-        }
-        int index = exam.getAnswers().indexOf(new Answer(oldQuestion));
-        if (index != -1) {
-            return exam.getAnswers().get(index);
-        }
-        var answer = new Answer(oldQuestion);
-        exam.getAnswers().add(answer);
-        return answer;
-    }
-
-    public void addExamStudent(ExamStudent exam) {
-        if (exams == null) {
-            exams = new ArrayList<>();
-        }
-        int index = exams.indexOf(new ExamStudent(exam.getExam()));
-        if (index != -1) {
-            exams.set(index, exam);
-        } else {
-            exams.add(exam);
-        }
     }
 
     @Override
@@ -213,8 +152,6 @@ public class User implements Parcelable {
         dest.writeString(this.address);
         dest.writeString(this.imageProfile);
         dest.writeInt(this.type);
-        dest.writeInt(this.grade);
-        dest.writeList(this.exams);
     }
 
     public void readFromParcel(Parcel source) {
@@ -227,9 +164,6 @@ public class User implements Parcelable {
         this.address = source.readString();
         this.imageProfile = source.readString();
         this.type = source.readInt();
-        this.grade = source.readInt();
-        this.exams = new ArrayList<>();
-        source.readList(this.exams, ExamStudent.class.getClassLoader());
     }
 
     protected User(Parcel in) {
@@ -242,9 +176,6 @@ public class User implements Parcelable {
         this.address = in.readString();
         this.imageProfile = in.readString();
         this.type = in.readInt();
-        this.grade = in.readInt();
-        this.exams = new ArrayList<>();
-        in.readList(this.exams, ExamStudent.class.getClassLoader());
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

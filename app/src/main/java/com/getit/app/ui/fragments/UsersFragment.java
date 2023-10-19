@@ -15,9 +15,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.getit.app.Constants;
 import com.getit.app.R;
 import com.getit.app.databinding.FragmentUsersBinding;
-import com.getit.app.Constants;
 import com.getit.app.models.User;
 import com.getit.app.persenters.user.UsersCallback;
 import com.getit.app.persenters.user.UsersPresenter;
@@ -93,11 +93,7 @@ public class UsersFragment extends Fragment implements UsersCallback, UsersAdapt
     }
 
     private void load() {
-        if (StorageHelper.getCurrentUser().isAdmin()) {
-            presenter.getUsers(userType);
-        } else {
-            presenter.getUsers(userType, StorageHelper.getCurrentUser().getGrade());
-        }
+        presenter.getUsers(userType);
     }
 
     @Override
@@ -198,7 +194,7 @@ public class UsersFragment extends Fragment implements UsersCallback, UsersAdapt
     @Override
     public void onDeleteUserComplete(User user) {
         int index = searchedUsers.indexOf(user);
-        if(index != -1) {
+        if (index != -1) {
             searchedUsers.remove(index);
             usersAdapter.notifyItemRemoved(index);
         }

@@ -130,43 +130,6 @@ public class UsersPresenter implements BasePresenter {
         reference.addListenerForSingleValueEvent(listener);
     }
 
-    public void getUsers(int type, int grade) {
-        callback.onShowLoading();
-        listener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                List<User> users = new ArrayList<>();
-
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    User user = dataSnapshot.getValue(User.class);
-                    if (user.getType() == type && (user.getGrade() == grade)) {
-                        users.add(user);
-                    }
-                }
-
-                if (callback != null) {
-                    Collections.sort(users, new Comparator<User>() {
-                        @Override
-                        public int compare(User o1, User o2) {
-                            return o1.getFullName().compareTo(o2.getFullName());
-                        }
-                    });
-                    callback.onGetUsersComplete(users);
-                    callback.onHideLoading();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                if (callback != null) {
-                    callback.onFailure("Unable to get message: " + databaseError.getMessage(), null);
-                    callback.onHideLoading();
-                }
-            }
-        };
-        reference.addListenerForSingleValueEvent(listener);
-    }
-
     public void getUserById(String id) {
         reference.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
