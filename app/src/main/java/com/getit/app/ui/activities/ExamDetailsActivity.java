@@ -69,7 +69,7 @@ public class ExamDetailsActivity extends BaseActivity implements UsersCallback, 
         binding.btnSaveNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentAnswer.isRight() == null) {
+                if (currentAnswer.getRight() == null) {
                     var valid = false;
                     if (currentQuestion.isMultiChoices()) {
                         if (currentAnswer.getSelectedAnswerIndex() <= 0) {
@@ -111,7 +111,7 @@ public class ExamDetailsActivity extends BaseActivity implements UsersCallback, 
 
     @Override
     public void onClick(View view) {
-        if (currentAnswer.isRight() != null) {
+        if (currentAnswer.getRight() != null) {
             if (view.getId() != R.id.is_right_1) {
                 binding.check1.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_unchecked, null));
             }

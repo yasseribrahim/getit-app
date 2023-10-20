@@ -27,7 +27,7 @@
             tools:text="User Name" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/container_actions"
+            android:id="@+id/container_correction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -35,7 +35,7 @@
             <View style="@style/SeparateVerticalView" />
 
             <FrameLayout
-                android:id="@+id/container_edit"
+                android:id="@+id/container_correction_true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
@@ -44,13 +44,13 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/ic_edit" />
+                    android:src="@drawable/ic_correction_true" />
             </FrameLayout>
 
             <View style="@style/SeparateVerticalView" />
 
             <FrameLayout
-                android:id="@+id/container_remove"
+                android:id="@+id/container_correction_false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
@@ -59,7 +59,7 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/ic_remove" />
+                    android:src="@drawable/ic_correction_false" />
             </FrameLayout>
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.LinearLayoutCompat>

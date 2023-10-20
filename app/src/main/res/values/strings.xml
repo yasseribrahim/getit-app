@@ -21,6 +21,7 @@
 
     <string name="str_exam_list">Exams List</string>
     <string name="str_exams_solved_list">Solved Exams</string>
+    <string name="str_questions_solved">Questions Solved</string>
 
     <string name="str_course">Course</string>
     <string name="str_course_hint">Select Course</string>

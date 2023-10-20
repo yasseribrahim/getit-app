@@ -20,6 +20,8 @@
     <string name="menu_questions">سؤال</string>
     <string name="menu_more">المزيد</string>
 
+    <string name="str_questions_solved">الأسئلة المحلولة</string>
+
     <string name="str_exam_list">قائمة الاختبارات</string>
     <string name="str_exams_solved_list">الاختبارات المحلولة</string>
 

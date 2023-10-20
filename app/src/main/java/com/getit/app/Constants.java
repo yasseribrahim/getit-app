@@ -16,6 +16,7 @@ public interface Constants {
     String NODE_NAME_MESSAGING = "messages";
     String NODE_NAME_ABOUT = "about";
     String NODE_NAME_USERS = "users";
+    String NODE_NAME_ANSWERS = "answers";
     String NODE_NAME_GRADES = "grades";
     String NODE_NAME_UNITS = "units";
     String NODE_NAME_LESSONS = "lessons";

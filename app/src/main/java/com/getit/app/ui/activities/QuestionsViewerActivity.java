@@ -1,7 +1,6 @@
 package com.getit.app.ui.activities;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,7 +12,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.getit.app.Constants;
 import com.getit.app.R;
-import com.getit.app.databinding.ActivityQuestonsBinding;
+import com.getit.app.databinding.ActivityQuestonsViewerBinding;
 import com.getit.app.models.Answer;
 import com.getit.app.models.AnswerStudent;
 import com.getit.app.models.Lesson;
@@ -23,8 +22,7 @@ import com.getit.app.persenters.answer.AnswersCallback;
 import com.getit.app.persenters.answer.AnswersPresenter;
 import com.getit.app.persenters.questions.QuestionsCallback;
 import com.getit.app.persenters.questions.QuestionsPresenter;
-import com.getit.app.ui.activities.admin.QuestionActivity;
-import com.getit.app.ui.adptres.QuestionsAdapter;
+import com.getit.app.ui.adptres.QuestionsViewerAdapter;
 import com.getit.app.ui.fragments.SolverQuestionArticleBottomSheet;
 import com.getit.app.ui.fragments.SolverQuestionMultiChoicesBottomSheet;
 import com.getit.app.ui.fragments.SolverQuestionTrueFalseBottomSheet;
@@ -35,26 +33,28 @@ import com.getit.app.utilities.helpers.StorageHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionsActivity extends BaseActivity implements
+public class QuestionsViewerActivity extends BaseActivity implements
         QuestionsCallback, AnswersCallback,
-        QuestionsAdapter.OnQuestionsClickListener,
+        QuestionsViewerAdapter.OnQuestionsViewerClickListener,
         SolverQuestionMultiChoicesBottomSheet.OnQuestionMultiChoicesSolveCallback,
         SolverQuestionTrueFalseBottomSheet.OnQuestionTrueFalseSolveCallback,
         SolverQuestionArticleBottomSheet.OnQuestionArticleSolveCallback {
-    private ActivityQuestonsBinding binding;
+    private ActivityQuestonsViewerBinding binding;
     private QuestionsPresenter presenter;
     private AnswersPresenter answersPresenter;
-    private QuestionsAdapter adapter;
-    private List<Question> questions, searchedQuestions;
+    private QuestionsViewerAdapter solvedAdapter;
+    private QuestionsViewerAdapter unsolvedAdapter;
+    private List<Question> questions, searchedQuestions, solvedQuestions, unsolvedQuestions;
     private Lesson lesson;
     private User currentUser;
     private AnswerStudent answerStudent;
+    private List<Answer> answers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         LocaleHelper.setLocale(this, getCurrentLanguage().getLanguage());
         super.onCreate(savedInstanceState);
-        binding = ActivityQuestonsBinding.inflate(getLayoutInflater());
+        binding = ActivityQuestonsViewerBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         currentUser = StorageHelper.getCurrentUser();
@@ -62,22 +62,11 @@ public class QuestionsActivity extends BaseActivity implements
         answersPresenter = new AnswersPresenter(this);
         lesson = getIntent().getParcelableExtra(Constants.ARG_OBJECT);
 
-        binding.btnAdd.setVisibility(StorageHelper.getCurrentUser().isAdmin() ? View.VISIBLE : View.GONE);
         binding.refreshLayout.setColorSchemeResources(R.color.refreshColor1, R.color.refreshColor2, R.color.refreshColor3, R.color.refreshColor4);
         binding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 load();
-            }
-        });
-
-        binding.btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Question question = new Question();
-                question.setLessonId(lesson.getId());
-                question.setLessonName(lesson.getName());
-                openQuestionActivity(question);
             }
         });
 
@@ -100,9 +89,15 @@ public class QuestionsActivity extends BaseActivity implements
 
         questions = new ArrayList<>();
         searchedQuestions = new ArrayList<>();
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new QuestionsAdapter(searchedQuestions, this);
-        binding.recyclerView.setAdapter(adapter);
+        solvedQuestions = new ArrayList<>();
+        unsolvedQuestions = new ArrayList<>();
+        answers = new ArrayList<>();
+        binding.recyclerViewSolvedQuestions.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerViewUnsolvedQuestions.setLayoutManager(new LinearLayoutManager(this));
+        solvedAdapter = new QuestionsViewerAdapter(solvedQuestions, new ArrayList<>(), this);
+        unsolvedAdapter = new QuestionsViewerAdapter(unsolvedQuestions, answers, this);
+        binding.recyclerViewSolvedQuestions.setAdapter(solvedAdapter);
+        binding.recyclerViewUnsolvedQuestions.setAdapter(unsolvedAdapter);
         setUpActionBar();
     }
 
@@ -138,26 +133,30 @@ public class QuestionsActivity extends BaseActivity implements
         this.questions.clear();
         this.questions.addAll(users);
         search(binding.textSearch.getText().toString());
+
         answersPresenter.getAnswer(lesson.getId(), currentUser.getId());
     }
 
     @Override
-    public void onGetAnswerComplete(AnswerStudent answer) {
-        if (answer == null) {
-            answer = new AnswerStudent(lesson.getId(), currentUser.getId());
+    public void onGetAnswerComplete(AnswerStudent answerStudent) {
+        if (answerStudent == null) {
+            answerStudent = new AnswerStudent(lesson.getId(), currentUser.getId());
         }
 
         for (Question question : questions) {
-            var object = answer.getAnswer(question);
+            var object = answerStudent.getAnswer(question);
         }
 
-        this.answerStudent = answer;
-        answersPresenter.save(answer);
+        this.answerStudent = answerStudent;
+        answersPresenter.save(answerStudent);
+
+        refresh();
     }
 
     @Override
     public void onSaveAnswerComplete() {
         ToastUtils.longToast(R.string.str_message_added_successfully);
+        refresh();
     }
 
     @Override
@@ -199,17 +198,30 @@ public class QuestionsActivity extends BaseActivity implements
     }
 
     private void refresh() {
-        binding.message.setVisibility(View.GONE);
-        if (searchedQuestions.isEmpty()) {
-            binding.message.setVisibility(View.VISIBLE);
-        }
+        if (answerStudent != null) {
+            answers.clear();
+            solvedQuestions.clear();
+            unsolvedQuestions.clear();
+            for (var question : searchedQuestions) {
+                var answer = answerStudent.getAnswer(question);
 
-        adapter.notifyDataSetChanged();
+                if (answer.isAnswered()) {
+                    solvedQuestions.add(question);
+                    answers.add(answer);
+                } else {
+                    unsolvedQuestions.add(question);
+                }
+            }
+
+            binding.messageSolvedQuestionsEmpty.setVisibility(solvedQuestions.isEmpty() ? View.VISIBLE : View.GONE);
+            binding.messageUnsolvedQuestionsEmpty.setVisibility(unsolvedQuestions.isEmpty() ? View.VISIBLE : View.GONE);
+            solvedAdapter.notifyDataSetChanged();
+            unsolvedAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
-    public void onQuestionViewListener(int position) {
-        Question question = searchedQuestions.get(position);
+    public void onQuestionViewListener(Question question) {
         Answer answer = this.answerStudent.getAnswer(question);
         if (!answer.isAnswered()) {
             if (answer == null) {
@@ -248,39 +260,18 @@ public class QuestionsActivity extends BaseActivity implements
     }
 
     @Override
-    public void onQuestionDeleteListener(int position) {
-        if (position >= 0 && position < searchedQuestions.size()) {
-            Question question = searchedQuestions.get(position);
-            int index = questions.indexOf(question);
-            if (index >= 0 && index < questions.size()) {
-                questions.remove(index);
-            }
-
-            presenter.delete(question);
-        }
+    public void onQuestionCorrectionTrueListener(Question question) {
+        Answer answer = this.answerStudent.getAnswer(question);
+        answer.setTureAnswer(true);
+        answerStudent.addAnswer(answer);
+        answersPresenter.save(answerStudent);
     }
 
     @Override
-    public void onQuestionEditListener(int position) {
-        if (position >= 0 && position < searchedQuestions.size()) {
-            Question user = searchedQuestions.get(position);
-            openQuestionActivity(user);
-        }
-    }
-
-    @Override
-    public void onDeleteQuestionComplete(Question Question) {
-        int index = searchedQuestions.indexOf(Question);
-        if (index != -1) {
-            searchedQuestions.remove(index);
-            adapter.notifyItemRemoved(index);
-        }
-        Toast.makeText(this, R.string.str_message_delete_successfully, Toast.LENGTH_LONG).show();
-    }
-
-    private void openQuestionActivity(Question Question) {
-        Intent intent = new Intent(this, QuestionActivity.class);
-        intent.putExtra(Constants.ARG_OBJECT, Question);
-        startActivity(intent);
+    public void onQuestionCorrectionFalseListener(Question question) {
+        Answer answer = this.answerStudent.getAnswer(question);
+        answer.setTureAnswer(false);
+        answerStudent.addAnswer(answer);
+        answersPresenter.save(answerStudent);
     }
 }

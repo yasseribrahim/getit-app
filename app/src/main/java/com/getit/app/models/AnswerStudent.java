@@ -6,15 +6,17 @@ import java.util.Objects;
 
 public class AnswerStudent {
     private String lessonId;
+    private String studentId;
     private List<Answer> answers;
     private boolean finished;
 
     public AnswerStudent() {
-        this(null);
+        this(null, null);
     }
 
-    public AnswerStudent(String lessonId) {
+    public AnswerStudent(String lessonId, String studentId) {
         this.lessonId = lessonId;
+        this.studentId = studentId;
         this.answers = new ArrayList<>();
         this.finished = false;
     }
@@ -25,6 +27,14 @@ public class AnswerStudent {
 
     public void setLessonId(String lessonId) {
         this.lessonId = lessonId;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 
     public List<Answer> getAnswers() {
@@ -43,6 +53,31 @@ public class AnswerStudent {
         return finished;
     }
 
+    public Answer getAnswer(Question question) {
+        if (answers == null) {
+            answers = new ArrayList<>();
+        }
+        int index = answers.indexOf(new Answer(question));
+        if (index != -1) {
+            return answers.get(index);
+        }
+        var answer = new Answer(question);
+        answers.add(answer);
+        return answer;
+    }
+
+    public void addAnswer(Answer answer) {
+        if (answers == null) {
+            answers = new ArrayList<>();
+        }
+        int index = answers.indexOf(new Answer(answer.getQuestion()));
+        if (index != -1) {
+            answers.set(index, answer);
+        } else {
+            answers.add(answer);
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -58,9 +93,11 @@ public class AnswerStudent {
 
     @Override
     public String toString() {
-        return "ExamStudent{" +
-                "lessonId=" + lessonId +
+        return "AnswerStudent{" +
+                "lessonId='" + lessonId + '\'' +
+                ", studentId='" + studentId + '\'' +
                 ", answers=" + answers +
+                ", finished=" + finished +
                 '}';
     }
 }

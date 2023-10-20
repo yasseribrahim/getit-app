@@ -22,6 +22,7 @@
     <color name="gray_dark">#FFa9a9a9</color>
     <color name="background">#FFf9fafb</color>
     <color name="gray">#FFc6c6c6</color>
+    <color name="gray_light">#e1e1e1</color>
     <color name="red">#FFBE0000</color>
     <color name="red_55">#55BE0000</color>
     <color name="green">#4E9F3D</color>

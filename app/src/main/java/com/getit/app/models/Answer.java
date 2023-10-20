@@ -8,21 +8,25 @@ import java.util.Objects;
 public class Answer implements Parcelable {
     private Question question;
     private int selectedAnswerIndex;
+    private Boolean tureAnswer;
     private String answer;
     private Boolean isRight;
+    private boolean answered;
 
     public Answer() {
     }
 
     public Answer(Question question) {
-        this.question = question;
+        this(question, 0, null, null, null);
     }
 
-    public Answer(Question question, int selectedAnswerIndex, String answer, Boolean isRight) {
+    public Answer(Question question, int selectedAnswerIndex, String answer, Boolean isRight, Boolean tureAnswer) {
         this.question = question;
         this.selectedAnswerIndex = selectedAnswerIndex;
         this.answer = answer;
         this.isRight = isRight;
+        this.tureAnswer = tureAnswer;
+        this.answered = false;
     }
 
     public Question getQuestion() {
@@ -49,12 +53,21 @@ public class Answer implements Parcelable {
         this.answer = answer;
     }
 
-    public Boolean isRight() {
-        return isRight;
+
+    public void setTureAnswer(Boolean tureAnswer) {
+        this.tureAnswer = tureAnswer;
     }
 
-    public void setIsRight(Boolean isRight) {
-        this.isRight = isRight;
+    public Boolean getTureAnswer() {
+        return tureAnswer;
+    }
+
+    public void setRight(Boolean right) {
+        isRight = right;
+    }
+
+    public Boolean getRight() {
+        return isRight;
     }
 
     public void correct() {
@@ -65,9 +78,20 @@ public class Answer implements Parcelable {
             } else {
                 isRight = false;
             }
+        } else if (question.isTrueFalse()) {
+            isRight = question.isAnswerTrue() == tureAnswer;
         } else {
             isRight = null;
         }
+        answered = true;
+    }
+
+    public void setAnswered(boolean answered) {
+        this.answered = answered;
+    }
+
+    public boolean isAnswered() {
+        return answered;
     }
 
     @Override
@@ -87,9 +111,11 @@ public class Answer implements Parcelable {
     public String toString() {
         return "Answer{" +
                 "question=" + question +
-                ", choice=" + selectedAnswerIndex +
+                ", selectedAnswerIndex=" + selectedAnswerIndex +
+                ", tureAnswer=" + tureAnswer +
                 ", answer='" + answer + '\'' +
                 ", isRight=" + isRight +
+                ", answered=" + answered +
                 '}';
     }
 
@@ -102,25 +128,31 @@ public class Answer implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(this.question, flags);
         dest.writeInt(this.selectedAnswerIndex);
+        dest.writeValue(this.tureAnswer);
         dest.writeString(this.answer);
         dest.writeValue(this.isRight);
+        dest.writeByte(this.answered ? (byte) 1 : (byte) 0);
     }
 
     public void readFromParcel(Parcel source) {
         this.question = source.readParcelable(Question.class.getClassLoader());
         this.selectedAnswerIndex = source.readInt();
+        this.tureAnswer = (Boolean) source.readValue(Boolean.class.getClassLoader());
         this.answer = source.readString();
         this.isRight = (Boolean) source.readValue(Boolean.class.getClassLoader());
+        this.answered = source.readByte() != 0;
     }
 
     protected Answer(Parcel in) {
         this.question = in.readParcelable(Question.class.getClassLoader());
         this.selectedAnswerIndex = in.readInt();
+        this.tureAnswer = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.answer = in.readString();
         this.isRight = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.answered = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<Answer> CREATOR = new Parcelable.Creator<Answer>() {
+    public static final Creator<Answer> CREATOR = new Creator<Answer>() {
         @Override
         public Answer createFromParcel(Parcel source) {
             return new Answer(source);

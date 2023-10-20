@@ -33,13 +33,13 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Question oldQuestion = oldQuestions.get(position);
+        Question question = oldQuestions.get(position);
 
-        holder.binding.title.setText(oldQuestion.getTitle());
-        holder.binding.lesson.setText(oldQuestion.getLessonName());
-        holder.binding.description.setText(oldQuestion.getDescription());
-        holder.binding.description.setVisibility(oldQuestion.getDescription() != null && !oldQuestion.getDescription().isEmpty() ? View.VISIBLE : View.GONE);
-        holder.binding.type.setText(UIUtils.getQuestionType(oldQuestion.getType()));
+        holder.binding.title.setText(question.getTitle());
+        holder.binding.lesson.setText(question.getLessonName());
+        holder.binding.description.setText(question.getDescription());
+        holder.binding.description.setVisibility(question.getDescription() != null && !question.getDescription().isEmpty() ? View.VISIBLE : View.GONE);
+        holder.binding.type.setText(UIUtils.getQuestionType(question.getType()));
     }
 
     private int getSize(String id) {
