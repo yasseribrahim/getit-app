@@ -153,4 +153,11 @@
     <string name="str_your_answer">إجابتك</string>
     <string name="str_choices_hint">حدد الاختيار</string>
     <string name="str_your_answer_hint">اكتب إجابتك</string>
+
+    <string name="str_questions_counter">%s الأسئلة</string>
+    <string name="str_questions_solved_counter">تم حل %s</string>
+    <string name="str_questions_unsolved_counter">%s لم يتم حلها</string>
+    <string name="str_questions_right_counter">%s صحيح</string>
+    <string name="str_questions_wrong_counter">%s خطأ</string>
+    <string name="str_questions_result">النتيجة: %s</string>
 </resources>

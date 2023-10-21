@@ -150,4 +150,11 @@
     <string name="str_your_answer">Your Answer</string>
     <string name="str_choices_hint">Select Choice</string>
     <string name="str_your_answer_hint">Type Your Answer</string>
+
+    <string name="str_questions_counter">%s Questions</string>
+    <string name="str_questions_solved_counter">%s Solved</string>
+    <string name="str_questions_unsolved_counter">%s Unsolved</string>
+    <string name="str_questions_right_counter">%s Right</string>
+    <string name="str_questions_wrong_counter">%s Wrong</string>
+    <string name="str_questions_result">Result: %s</string>
 </resources>

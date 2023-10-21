@@ -13,6 +13,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+        <ImageView
+            android:id="@+id/answer_flag"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"/>
+
         <TextView
             android:id="@+id/title"
             android:layout_width="0dp"

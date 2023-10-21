@@ -43,21 +43,18 @@ public class QuestionsViewerAdapter extends RecyclerView.Adapter<QuestionsViewer
         holder.binding.description.setText(question.getDescription());
         holder.binding.description.setVisibility(question.getDescription() != null && !question.getDescription().isEmpty() ? View.VISIBLE : View.GONE);
         holder.binding.type.setText(UIUtils.getQuestionType(question.getType()));
-
+        holder.binding.answerFlag.setVisibility(View.GONE);
         int index = answers.indexOf(new Answer(question));
         if (index != -1) {
             Answer answer = answers.get(index);
+            holder.binding.answerFlag.setVisibility(answer.getRight() != null ? View.VISIBLE : View.GONE);
             if (answer.getRight() != null) {
                 if (answer.getRight()) {
-                    holder.binding.getRoot().setBackgroundColor(ResourcesCompat.getColor(holder.binding.getRoot().getResources(), R.color.green_55, null));
+                    holder.binding.answerFlag.setImageDrawable(ResourcesCompat.getDrawable(holder.binding.getRoot().getResources(), R.drawable.ic_correction_true, null));
                 } else {
-                    holder.binding.getRoot().setBackgroundColor(ResourcesCompat.getColor(holder.binding.getRoot().getResources(), R.color.red_55, null));
+                    holder.binding.answerFlag.setImageDrawable(ResourcesCompat.getDrawable(holder.binding.getRoot().getResources(), R.drawable.ic_correction_false, null));
                 }
-            } else {
-                holder.binding.getRoot().setBackgroundColor(ResourcesCompat.getColor(holder.binding.getRoot().getResources(), R.color.background, null));
             }
-        } else {
-            holder.binding.getRoot().setBackgroundColor(ResourcesCompat.getColor(holder.binding.getRoot().getResources(), R.color.background, null));
         }
     }
 

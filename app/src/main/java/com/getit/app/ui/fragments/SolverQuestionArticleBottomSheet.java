@@ -45,6 +45,7 @@ public class SolverQuestionArticleBottomSheet extends BottomSheetDialogFragment 
 
         binding.title.setText(answer.getQuestion().getTitle());
         binding.description.setText(answer.getQuestion().getDescription());
+        binding.containerDescription.setVisibility(answer.getQuestion().getDescription() == null || answer.getQuestion().getDescription().isEmpty() ? View.GONE : View.VISIBLE);
 
         binding.btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,7 +74,7 @@ public class SolverQuestionArticleBottomSheet extends BottomSheetDialogFragment 
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (answer.getSelectedAnswerIndex() <= 0) {
+                if (answer.getAnswer() == null || answer.getAnswer().isEmpty()) {
                     ToastUtils.longToast(R.string.str_enter_value);
                     return;
                 }

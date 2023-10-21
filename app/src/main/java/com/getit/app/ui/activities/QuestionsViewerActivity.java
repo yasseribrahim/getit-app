@@ -94,8 +94,8 @@ public class QuestionsViewerActivity extends BaseActivity implements
         answers = new ArrayList<>();
         binding.recyclerViewSolvedQuestions.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerViewUnsolvedQuestions.setLayoutManager(new LinearLayoutManager(this));
-        solvedAdapter = new QuestionsViewerAdapter(solvedQuestions, new ArrayList<>(), this);
-        unsolvedAdapter = new QuestionsViewerAdapter(unsolvedQuestions, answers, this);
+        solvedAdapter = new QuestionsViewerAdapter(solvedQuestions, answers, this);
+        unsolvedAdapter = new QuestionsViewerAdapter(unsolvedQuestions, new ArrayList<>(), this);
         binding.recyclerViewSolvedQuestions.setAdapter(solvedAdapter);
         binding.recyclerViewUnsolvedQuestions.setAdapter(unsolvedAdapter);
         setUpActionBar();
@@ -199,6 +199,7 @@ public class QuestionsViewerActivity extends BaseActivity implements
 
     private void refresh() {
         if (answerStudent != null) {
+            int right = 0, wrong = 0;
             answers.clear();
             solvedQuestions.clear();
             unsolvedQuestions.clear();
@@ -217,6 +218,38 @@ public class QuestionsViewerActivity extends BaseActivity implements
             binding.messageUnsolvedQuestionsEmpty.setVisibility(unsolvedQuestions.isEmpty() ? View.VISIBLE : View.GONE);
             solvedAdapter.notifyDataSetChanged();
             unsolvedAdapter.notifyDataSetChanged();
+            summary();
+        }
+    }
+
+    private void summary() {
+        if (answerStudent != null) {
+            int right = 0, wrong = 0, solved = 0, unsolved = 0;
+            for (var question : questions) {
+                var answer = answerStudent.getAnswer(question);
+
+                if (answer.isAnswered()) {
+                    solved++;
+                } else {
+                    unsolved++;
+                }
+
+                if (answer.getRight() != null) {
+                    right += answer.getRight() ? 1 : 0;
+                    wrong += !answer.getRight() ? 1 : 0;
+                }
+            }
+
+            double result = (!questions.isEmpty() ? ((right * 1.0) / questions.size()) : 0) * 100;
+            int decimalPlaces = 0;
+            double factor = Math.pow(10, decimalPlaces);
+            double roundedResult = (double) Math.round(result * factor) / factor;
+            binding.questionsCounter.setText(getString(R.string.str_questions_counter, questions.size() + ""));
+            binding.questionsSolvedCounter.setText(getString(R.string.str_questions_solved_counter, solved + ""));
+            binding.questionsUnsolvedCounter.setText(getString(R.string.str_questions_unsolved_counter, unsolved + ""));
+            binding.questionsRightCounter.setText(getString(R.string.str_questions_right_counter, right + ""));
+            binding.questionsWrongCounter.setText(getString(R.string.str_questions_wrong_counter, wrong + ""));
+            binding.result.setText(getString(R.string.str_questions_result, roundedResult + "%"));
         }
     }
 
