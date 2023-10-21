@@ -27,11 +27,19 @@ public class LessonsPresenter implements BasePresenter {
         this.callback = callback;
     }
 
-    public void getLessonsCount(String gradeId) {
-        reference.child(gradeId).addListenerForSingleValueEvent(new ValueEventListener() {
+    public void getLessonsCount() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                callback.onGetLessonsCountComplete(snapshot.getChildrenCount());
+                final List<Long> counters = new ArrayList<>();
+                snapshot.getChildren().forEach(e -> {
+                    counters.add(e.getChildrenCount());
+                });
+                long counter = 0;
+                for (Long value : counters) {
+                    counter += value;
+                }
+                callback.onGetLessonsCountComplete(counter);
             }
 
             @Override

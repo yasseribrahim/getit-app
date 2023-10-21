@@ -31,7 +31,15 @@ public class QuestionsPresenter implements BasePresenter {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                callback.onGetQuestionsCountComplete(snapshot.getChildrenCount());
+                final List<Long> counters = new ArrayList<>();
+                snapshot.getChildren().forEach(e -> {
+                    counters.add(e.getChildrenCount());
+                });
+                long counter = 0;
+                for (Long value : counters) {
+                    counter += value;
+                }
+                callback.onGetQuestionsCountComplete(counter);
             }
 
             @Override

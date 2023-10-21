@@ -57,7 +57,14 @@ public class QuestionsViewerActivity extends BaseActivity implements
         binding = ActivityQuestonsViewerBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        currentUser = StorageHelper.getCurrentUser();
+        if (getIntent().getExtras().containsKey(Constants.ARG_USER)) {
+            currentUser = getIntent().getParcelableExtra(Constants.ARG_USER);
+            binding.studentInfo.setVisibility(View.VISIBLE);
+            binding.studentName.setText(currentUser.getFullName());
+        } else {
+            currentUser = StorageHelper.getCurrentUser();
+            binding.studentInfo.setVisibility(View.GONE);
+        }
         presenter = new QuestionsPresenter(this);
         answersPresenter = new AnswersPresenter(this);
         lesson = getIntent().getParcelableExtra(Constants.ARG_OBJECT);
@@ -295,7 +302,7 @@ public class QuestionsViewerActivity extends BaseActivity implements
     @Override
     public void onQuestionCorrectionTrueListener(Question question) {
         Answer answer = this.answerStudent.getAnswer(question);
-        answer.setTureAnswer(true);
+        answer.correct(true);
         answerStudent.addAnswer(answer);
         answersPresenter.save(answerStudent);
     }
@@ -303,7 +310,7 @@ public class QuestionsViewerActivity extends BaseActivity implements
     @Override
     public void onQuestionCorrectionFalseListener(Question question) {
         Answer answer = this.answerStudent.getAnswer(question);
-        answer.setTureAnswer(false);
+        answer.correct(false);
         answerStudent.addAnswer(answer);
         answersPresenter.save(answerStudent);
     }

@@ -123,7 +123,15 @@ public class UnitDetailsActivity extends BaseActivity implements LessonsCallback
 
     @Override
     public void onLessonViewListener(Lesson lesson) {
-        Intent intent = new Intent(this, currentUser.isAdmin() ? QuestionsActivity.class : QuestionsViewerActivity.class);
+        Intent intent = null;
+        if (currentUser.isAdmin()) {
+            intent = new Intent(this, QuestionsActivity.class);
+        } else if (currentUser.isTeacher()) {
+            intent = new Intent(this, StudentsActivity.class);
+        } else {
+            intent = new Intent(this, QuestionsViewerActivity.class);
+        }
+
         intent.putExtra(Constants.ARG_OBJECT, lesson);
         startActivity(intent);
     }

@@ -27,6 +27,7 @@ public interface Constants {
     String NODE_NAME_QUESTIONS = "questions";
 
     String ARG_OBJECT = "object";
+    String ARG_USER = "user";
     String ARG_ID = "id";
     String ARG_ID_2 = "id-2";
 }

@@ -86,6 +86,11 @@ public class Answer implements Parcelable {
         answered = true;
     }
 
+    public void correct(boolean value) {
+        isRight = value;
+        answered = true;
+    }
+
     public void setAnswered(boolean answered) {
         this.answered = answered;
     }

@@ -41,6 +41,34 @@
                     android:hint="@string/str_search_hint" />
             </RelativeLayout>
 
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/student_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gray_light"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/student_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:textColor="@color/black_light"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+                </FrameLayout>
+
+                <View
+                    style="@style/SeparateHorizontalView"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

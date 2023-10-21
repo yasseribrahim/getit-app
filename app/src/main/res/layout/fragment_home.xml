@@ -151,7 +151,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/courses_counter"
+                        android:id="@+id/units_counter"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="00"
@@ -163,7 +163,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/menu_courses"
+                        android:text="@string/menu_units"
                         android:textStyle="bold"
                         android:textColor="@color/home_color3"
                         android:textSize="20sp"
@@ -189,7 +189,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/exams_counter"
+                        android:id="@+id/lessons_counter"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="00"
@@ -201,7 +201,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/menu_exams"
+                        android:text="@string/menu_lessons"
                         android:textStyle="bold"
                         android:textColor="@color/home_color4"
                         android:textSize="20sp"
