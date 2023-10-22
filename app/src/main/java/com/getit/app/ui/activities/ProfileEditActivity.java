@@ -205,7 +205,7 @@ public class ProfileEditActivity extends BaseActivity implements UsersCallback, 
     private void bind() {
         binding.username.setText("@" + user.getUsername());
         binding.type.setText(UIUtils.getAccountType(user.getType()));
-        binding.name.setText(user.getUsername());
+        binding.name.setText(user.getFullName());
         binding.email.setText(user.getUsername());
         binding.phone.setText(user.getPhone());
         binding.address.setText(user.getAddress());
@@ -256,6 +256,7 @@ public class ProfileEditActivity extends BaseActivity implements UsersCallback, 
     @Override
     public void onSaveUserComplete() {
         ToastUtils.longToast(R.string.str_message_updated_successfully);
+        StorageHelper.setCurrentUser(user);
         finish();
     }
 

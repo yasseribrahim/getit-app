@@ -77,7 +77,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void bind() {
         binding.username.setText("@" + user.getUsername());
         binding.type.setText(UIUtils.getAccountType(user.getType()));
-        binding.nameTextView.setText(user.getUsername());
+        binding.nameTextView.setText(user.getFullName());
         binding.emailTextView.setText(user.getUsername());
         binding.phoneTextView.setText(user.getPhone());
         binding.addressTextView.setText(user.getAddress());
