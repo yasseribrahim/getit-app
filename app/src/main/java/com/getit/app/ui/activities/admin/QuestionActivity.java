@@ -60,6 +60,7 @@ public class QuestionActivity extends BaseActivity implements QuestionsCallback,
             @Override
             public void onClick(View v) {
                 String title = binding.title.getText().toString().trim();
+                String correctAnswer = null;
 
                 if (title.isEmpty()) {
                     binding.title.setError(getString(R.string.str_title_hint));
@@ -79,10 +80,18 @@ public class QuestionActivity extends BaseActivity implements QuestionsCallback,
                         ToastUtils.longToast(R.string.str_enter_value);
                         return;
                     }
+                } else if (question.isArticle()) {
+                    if (binding.correctAnswer.getText().toString().isEmpty()) {
+                        ToastUtils.longToast(R.string.str_enter_value);
+                        return;
+                    } else {
+                        correctAnswer = binding.correctAnswer.getText().toString();
+                    }
                 }
 
                 question.setTitle(title);
                 question.setDescription(binding.description.getText().toString());
+                question.setCorrectAnswer(correctAnswer);
                 presenter.save(question);
             }
         });
@@ -168,9 +177,11 @@ public class QuestionActivity extends BaseActivity implements QuestionsCallback,
             }
         } else {
             question.setChoices(new ArrayList<>());
+            binding.correctAnswer.setText(question.getCorrectAnswer());
         }
         binding.choices.setVisibility(question.isMultiChoices() ? View.VISIBLE : View.GONE);
         binding.questionTrueFalseElements.setVisibility(question.isTrueFalse() ? View.VISIBLE : View.GONE);
+        binding.containerCorrectAnswerArticle.setVisibility(question.isArticle() ? View.VISIBLE : View.GONE);
     }
 
     private boolean validateMultiChoices() {

@@ -16,16 +16,19 @@ import com.getit.app.R;
 import com.getit.app.databinding.BottomSheetSolverQuestionArticleBinding;
 import com.getit.app.models.Answer;
 import com.getit.app.utilities.ToastUtils;
+import com.getit.app.utilities.helpers.StorageHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class SolverQuestionArticleBottomSheet extends BottomSheetDialogFragment {
     private BottomSheetSolverQuestionArticleBinding binding;
     private OnQuestionArticleSolveCallback callback;
     private Answer answer;
+    private int mode;
 
-    public static SolverQuestionArticleBottomSheet newInstance(Answer answer) {
+    public static SolverQuestionArticleBottomSheet newInstance(Answer answer, int mode) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.ARG_OBJECT, answer);
+        bundle.putInt(Constants.ARG_SHOW_MODE, mode);
         SolverQuestionArticleBottomSheet sheet = new SolverQuestionArticleBottomSheet();
         sheet.setArguments(bundle);
         return sheet;
@@ -36,6 +39,7 @@ public class SolverQuestionArticleBottomSheet extends BottomSheetDialogFragment 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = BottomSheetSolverQuestionArticleBinding.inflate(inflater);
         answer = getArguments().getParcelable(Constants.ARG_OBJECT);
+        mode = getArguments().getInt(Constants.ARG_SHOW_MODE);
         return binding.getRoot();
     }
 
@@ -46,7 +50,7 @@ public class SolverQuestionArticleBottomSheet extends BottomSheetDialogFragment 
         binding.title.setText(answer.getQuestion().getTitle());
         binding.description.setText(answer.getQuestion().getDescription());
         binding.containerDescription.setVisibility(answer.getQuestion().getDescription() == null || answer.getQuestion().getDescription().isEmpty() ? View.GONE : View.VISIBLE);
-
+        binding.containerButtons.setVisibility(Constants.SHOW_MODE_EDIT == mode ? View.VISIBLE : View.GONE);
         binding.btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,6 +90,16 @@ public class SolverQuestionArticleBottomSheet extends BottomSheetDialogFragment 
                 dismiss();
             }
         });
+
+        if (answer.isAnswered()) {
+            binding.answer.setText(answer.getAnswer());
+            binding.answer.setEnabled(false);
+        }
+
+        if (!StorageHelper.getCurrentUser().isStudent()) {
+            binding.containerCorrectAnswer.setVisibility(View.VISIBLE);
+            binding.correctAnswer.setText(answer.getQuestion().getCorrectAnswer());
+        }
     }
 
     @Override

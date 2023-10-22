@@ -212,17 +212,13 @@ public class QuestionsActivity extends BaseActivity implements
         Question question = searchedQuestions.get(position);
         Answer answer = this.answerStudent.getAnswer(question);
         if (!answer.isAnswered()) {
-            if (answer == null) {
-                answer = new Answer(question);
-                answerStudent.addAnswer(answer);
-            }
             switch (question.getType()) {
                 case Constants.QUESTION_TYPE_MULTI_CHOICE ->
-                        SolverQuestionMultiChoicesBottomSheet.newInstance(answer).show(getSupportFragmentManager(), "");
+                        SolverQuestionMultiChoicesBottomSheet.newInstance(answer, Constants.SHOW_MODE_VIEW).show(getSupportFragmentManager(), "");
                 case Constants.QUESTION_TYPE_TRUE_FALSE ->
-                        SolverQuestionTrueFalseBottomSheet.newInstance(answer).show(getSupportFragmentManager(), "");
+                        SolverQuestionTrueFalseBottomSheet.newInstance(answer, Constants.SHOW_MODE_VIEW).show(getSupportFragmentManager(), "");
                 case Constants.QUESTION_TYPE_ARTICLE ->
-                        SolverQuestionArticleBottomSheet.newInstance(answer).show(getSupportFragmentManager(), "");
+                        SolverQuestionArticleBottomSheet.newInstance(answer, Constants.SHOW_MODE_VIEW).show(getSupportFragmentManager(), "");
             }
         } else {
             ToastUtils.longToast("Question already answered");

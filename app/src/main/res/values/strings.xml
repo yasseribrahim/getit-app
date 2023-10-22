@@ -28,6 +28,7 @@
     <string name="str_name">Name</string>
 
     <string name="str_correction">Correction</string>
+    <string name="str_correct_answer">Correct Answer</string>
     <string name="str_save">Save</string>
     <string name="str_save_next">Save &amp; Next</string>
     <string name="str_back">Back</string>
@@ -36,6 +37,7 @@
     <string name="str_invalid_entered_value">Value invalid or already exist</string>
     <string name="str_ok">Ok</string>
     <string name="str_cancel">Cancel</string>
+    <string name="str_reset">Reset</string>
     <string name="str_message_request_camera_and_storage">يحتاج هذا التطبيق إلى الوصول إلى الكاميرا ومساحة التخزين الخاصة بك حتى تتمكن من التقاط الصور.</string>
 
     <string name="str_message_added_successfully">Added Successfully</string>

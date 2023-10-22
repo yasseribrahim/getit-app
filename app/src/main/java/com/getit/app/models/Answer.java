@@ -86,6 +86,18 @@ public class Answer implements Parcelable {
         answered = true;
     }
 
+    public void reset() {
+        if (question.isMultiChoices()) {
+            selectedAnswerIndex = 0;
+        } else if (question.isTrueFalse()) {
+            tureAnswer = null;
+        } else {
+            answer = null;
+        }
+        isRight = null;
+        answered = false;
+    }
+
     public void correct(boolean value) {
         isRight = value;
         answered = true;

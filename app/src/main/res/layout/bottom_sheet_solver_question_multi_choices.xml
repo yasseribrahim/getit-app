@@ -48,41 +48,49 @@
             android:textSize="12sp" />
     </FrameLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
-        android:background="@null"
-        android:text="@string/str_description"
-        android:textColor="@color/black_light"
-        android:textStyle="bold" />
-
-    <FrameLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/container_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/border_background"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp">
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:background="@null"
+            android:text="@string/str_description"
+            android:textColor="@color/black_light"
+            android:textStyle="bold" />
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@null"
-            android:gravity="top"
-            android:lines="4"
-            android:minLines="4"
-            android:paddingStart="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/border_background"
             android:paddingTop="5dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="5dp"
-            android:textSize="12sp" />
-    </FrameLayout>
+            android:paddingBottom="5dp">
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="top"
+                android:lines="4"
+                android:minLines="4"
+                android:paddingStart="10dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="5dp"
+                android:textSize="12sp" />
+        </FrameLayout>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progress"

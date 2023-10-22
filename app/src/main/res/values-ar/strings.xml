@@ -29,6 +29,7 @@
     <string name="str_course_hint">اختر الدورة</string>
     <string name="str_name">Name</string>
 
+    <string name="str_correct_answer">الاجابة الصحيحة</string>
     <string name="str_save_next">حفظ &amp; التالي</string>
     <string name="str_back">الرجوع</string>
     <string name="str_correction">تصحيح</string>
@@ -38,6 +39,7 @@
     <string name="str_invalid_entered_value">القيمة غير صالحة أو موجودة بالفعل</string>
     <string name="str_ok">نعم</string>
     <string name="str_cancel">الغاء</string>
+    <string name="str_reset">إعادة</string>
     <string name="str_message_request_camera_and_storage">يحتاج هذا التطبيق للوصول إلى الكاميرا ومساحة التخزين الخاصة بك حتى يتمكن من التقاط الصور.</string>
 
     <string name="str_message_added_successfully">تمت الإضافة بنجاح</string>

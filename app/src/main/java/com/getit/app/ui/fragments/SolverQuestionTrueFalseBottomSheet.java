@@ -15,16 +15,19 @@ import com.getit.app.R;
 import com.getit.app.databinding.BottomSheetSolverQuestionTrueFalseBinding;
 import com.getit.app.models.Answer;
 import com.getit.app.utilities.ToastUtils;
+import com.getit.app.utilities.helpers.StorageHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class SolverQuestionTrueFalseBottomSheet extends BottomSheetDialogFragment implements View.OnClickListener {
     private BottomSheetSolverQuestionTrueFalseBinding binding;
     private OnQuestionTrueFalseSolveCallback callback;
     private Answer answer;
+    private int mode;
 
-    public static SolverQuestionTrueFalseBottomSheet newInstance(Answer answer) {
+    public static SolverQuestionTrueFalseBottomSheet newInstance(Answer answer, int mode) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.ARG_OBJECT, answer);
+        bundle.putInt(Constants.ARG_SHOW_MODE, mode);
         SolverQuestionTrueFalseBottomSheet sheet = new SolverQuestionTrueFalseBottomSheet();
         sheet.setArguments(bundle);
         return sheet;
@@ -35,6 +38,7 @@ public class SolverQuestionTrueFalseBottomSheet extends BottomSheetDialogFragmen
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = BottomSheetSolverQuestionTrueFalseBinding.inflate(inflater);
         answer = getArguments().getParcelable(Constants.ARG_OBJECT);
+        mode = getArguments().getInt(Constants.ARG_SHOW_MODE);
         return binding.getRoot();
     }
 
@@ -44,9 +48,29 @@ public class SolverQuestionTrueFalseBottomSheet extends BottomSheetDialogFragmen
 
         binding.title.setText(answer.getQuestion().getTitle());
         binding.description.setText(answer.getQuestion().getDescription());
+        binding.containerDescription.setVisibility(answer.getQuestion().getDescription() == null || answer.getQuestion().getDescription().isEmpty() ? View.GONE : View.VISIBLE);
+        binding.containerButtons.setVisibility(Constants.SHOW_MODE_EDIT == mode ? View.VISIBLE : View.GONE);
 
-        binding.isTrueAnswer.setOnClickListener(this);
-        binding.isFalseAnswer.setOnClickListener(this);
+        if (Constants.SHOW_MODE_EDIT == mode) {
+            binding.isTrueAnswer.setOnClickListener(this);
+            binding.isFalseAnswer.setOnClickListener(this);
+        }
+
+        if (answer.isAnswered() && answer.getTureAnswer() != null) {
+            if (answer.getTureAnswer()) {
+                onClick(binding.isTrueAnswer);
+            } else {
+                onClick(binding.isFalseAnswer);
+            }
+        }
+
+        if(!StorageHelper.getCurrentUser().isStudent()) {
+            if (answer.getQuestion().isAnswerTrue()) {
+                binding.isTrueAnswerText.setTextColor(ResourcesCompat.getColor(getResources(), R.color.green, null));
+            } else {
+                binding.isFalseAnswerText.setTextColor(ResourcesCompat.getColor(getResources(), R.color.green, null));
+            }
+        }
 
         binding.btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override

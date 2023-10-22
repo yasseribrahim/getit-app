@@ -29,5 +29,7 @@ public interface Constants {
     String ARG_OBJECT = "object";
     String ARG_USER = "user";
     String ARG_ID = "id";
-    String ARG_ID_2 = "id-2";
+    String ARG_SHOW_MODE = "mode";
+    int SHOW_MODE_VIEW = 1;
+    int SHOW_MODE_EDIT = 2;
 }

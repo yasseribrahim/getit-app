@@ -16,16 +16,19 @@ import com.getit.app.databinding.BottomSheetSolverQuestionMultiChoicesBinding;
 import com.getit.app.models.Answer;
 import com.getit.app.models.QuestionChoice;
 import com.getit.app.utilities.ToastUtils;
+import com.getit.app.utilities.helpers.StorageHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class SolverQuestionMultiChoicesBottomSheet extends BottomSheetDialogFragment implements View.OnClickListener {
     private BottomSheetSolverQuestionMultiChoicesBinding binding;
     private OnQuestionMultiChoicesSolveCallback callback;
     private Answer answer;
+    private int mode;
 
-    public static SolverQuestionMultiChoicesBottomSheet newInstance(Answer answer) {
+    public static SolverQuestionMultiChoicesBottomSheet newInstance(Answer answer, int mode) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.ARG_OBJECT, answer);
+        bundle.putInt(Constants.ARG_SHOW_MODE, mode);
         SolverQuestionMultiChoicesBottomSheet sheet = new SolverQuestionMultiChoicesBottomSheet();
         sheet.setArguments(bundle);
         return sheet;
@@ -36,6 +39,7 @@ public class SolverQuestionMultiChoicesBottomSheet extends BottomSheetDialogFrag
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = BottomSheetSolverQuestionMultiChoicesBinding.inflate(inflater);
         answer = getArguments().getParcelable(Constants.ARG_OBJECT);
+        mode = getArguments().getInt(Constants.ARG_SHOW_MODE);
         return binding.getRoot();
     }
 
@@ -45,11 +49,41 @@ public class SolverQuestionMultiChoicesBottomSheet extends BottomSheetDialogFrag
 
         binding.title.setText(answer.getQuestion().getTitle());
         binding.description.setText(answer.getQuestion().getDescription());
+        binding.containerDescription.setVisibility(answer.getQuestion().getDescription() == null || answer.getQuestion().getDescription().isEmpty() ? View.GONE : View.VISIBLE);
+        binding.containerButtons.setVisibility(Constants.SHOW_MODE_EDIT == mode ? View.VISIBLE : View.GONE);
 
-        binding.choice1.setOnClickListener(this);
-        binding.choice2.setOnClickListener(this);
-        binding.choice3.setOnClickListener(this);
-        binding.choice4.setOnClickListener(this);
+        if (Constants.SHOW_MODE_EDIT == mode) {
+            binding.choice1.setOnClickListener(this);
+            binding.choice2.setOnClickListener(this);
+            binding.choice3.setOnClickListener(this);
+            binding.choice4.setOnClickListener(this);
+        }
+
+        if (answer.isAnswered()) {
+            switch (answer.getSelectedAnswerIndex()) {
+                case 1 -> onClick(binding.choice1);
+                case 2 -> onClick(binding.choice2);
+                case 3 -> onClick(binding.choice3);
+                case 4 -> onClick(binding.choice4);
+            }
+        }
+
+        if (!StorageHelper.getCurrentUser().isStudent()) {
+            for (int i = 0; i < answer.getQuestion().getChoices().size(); i++) {
+                if (answer.getQuestion().getChoices().get(i).isCorrectAnswer()) {
+                    switch (i + 1) {
+                        case 1 ->
+                                binding.choice1Text.setTextColor(ResourcesCompat.getColor(getResources(), R.color.green, null));
+                        case 2 ->
+                                binding.choice2Text.setTextColor(ResourcesCompat.getColor(getResources(), R.color.green, null));
+                        case 3 ->
+                                binding.choice3Text.setTextColor(ResourcesCompat.getColor(getResources(), R.color.green, null));
+                        case 4 ->
+                                binding.choice4Text.setTextColor(ResourcesCompat.getColor(getResources(), R.color.green, null));
+                    }
+                }
+            }
+        }
 
         binding.btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override

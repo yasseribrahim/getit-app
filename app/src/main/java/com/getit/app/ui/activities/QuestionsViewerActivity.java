@@ -60,9 +60,11 @@ public class QuestionsViewerActivity extends BaseActivity implements
         if (getIntent().getExtras().containsKey(Constants.ARG_USER)) {
             currentUser = getIntent().getParcelableExtra(Constants.ARG_USER);
             binding.studentInfo.setVisibility(View.VISIBLE);
+            binding.btnReset.setVisibility(View.GONE);
             binding.studentName.setText(currentUser.getFullName());
         } else {
             currentUser = StorageHelper.getCurrentUser();
+            binding.btnReset.setVisibility(View.VISIBLE);
             binding.studentInfo.setVisibility(View.GONE);
         }
         presenter = new QuestionsPresenter(this);
@@ -74,6 +76,18 @@ public class QuestionsViewerActivity extends BaseActivity implements
             @Override
             public void onRefresh() {
                 load();
+            }
+        });
+
+        binding.btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (var answer : answers) {
+                    answer.reset();
+                    answerStudent.addAnswer(answer);
+                }
+
+                answersPresenter.save(answerStudent);
             }
         });
 
@@ -263,21 +277,13 @@ public class QuestionsViewerActivity extends BaseActivity implements
     @Override
     public void onQuestionViewListener(Question question) {
         Answer answer = this.answerStudent.getAnswer(question);
-        if (!answer.isAnswered()) {
-            if (answer == null) {
-                answer = new Answer(question);
-                answerStudent.addAnswer(answer);
-            }
-            switch (question.getType()) {
-                case Constants.QUESTION_TYPE_MULTI_CHOICE ->
-                        SolverQuestionMultiChoicesBottomSheet.newInstance(answer).show(getSupportFragmentManager(), "");
-                case Constants.QUESTION_TYPE_TRUE_FALSE ->
-                        SolverQuestionTrueFalseBottomSheet.newInstance(answer).show(getSupportFragmentManager(), "");
-                case Constants.QUESTION_TYPE_ARTICLE ->
-                        SolverQuestionArticleBottomSheet.newInstance(answer).show(getSupportFragmentManager(), "");
-            }
-        } else {
-            ToastUtils.longToast("Question already answered");
+        switch (question.getType()) {
+            case Constants.QUESTION_TYPE_MULTI_CHOICE ->
+                    SolverQuestionMultiChoicesBottomSheet.newInstance(answer, !answer.isAnswered() ? Constants.SHOW_MODE_EDIT : Constants.SHOW_MODE_VIEW).show(getSupportFragmentManager(), "");
+            case Constants.QUESTION_TYPE_TRUE_FALSE ->
+                    SolverQuestionTrueFalseBottomSheet.newInstance(answer, !answer.isAnswered() ? Constants.SHOW_MODE_EDIT : Constants.SHOW_MODE_VIEW).show(getSupportFragmentManager(), "");
+            case Constants.QUESTION_TYPE_ARTICLE ->
+                    SolverQuestionArticleBottomSheet.newInstance(answer, !answer.isAnswered() ? Constants.SHOW_MODE_EDIT : Constants.SHOW_MODE_VIEW).show(getSupportFragmentManager(), "");
         }
     }
 

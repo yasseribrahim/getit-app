@@ -44,6 +44,7 @@ public class QuestionsViewerAdapter extends RecyclerView.Adapter<QuestionsViewer
         holder.binding.description.setVisibility(question.getDescription() != null && !question.getDescription().isEmpty() ? View.VISIBLE : View.GONE);
         holder.binding.type.setText(UIUtils.getQuestionType(question.getType()));
         holder.binding.answerFlag.setVisibility(View.GONE);
+        holder.binding.containerCorrection.setVisibility((question.isArticle() && (currentUser.isAdmin() || currentUser.isTeacher())) ? View.VISIBLE : View.GONE);
         int index = answers.indexOf(new Answer(question));
         if (index != -1) {
             Answer answer = answers.get(index);
@@ -75,7 +76,6 @@ public class QuestionsViewerAdapter extends RecyclerView.Adapter<QuestionsViewer
         ViewHolder(View view) {
             super(view);
             binding = ItemQuestionViewerBinding.bind(view);
-            binding.containerCorrection.setVisibility((currentUser.isAdmin() || currentUser.isTeacher()) ? View.VISIBLE : View.GONE);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

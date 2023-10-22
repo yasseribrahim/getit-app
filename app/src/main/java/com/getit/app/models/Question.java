@@ -20,6 +20,8 @@ public class Question implements Parcelable {
     private List<QuestionChoice> choices;
     private boolean isAnswerTrue;
 
+    private String correctAnswer;
+
     public Question() {
         this(null, null, null, null, 0);
     }
@@ -114,6 +116,14 @@ public class Question implements Parcelable {
         return isAnswerTrue;
     }
 
+    public void setCorrectAnswer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
+    }
+
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -137,7 +147,8 @@ public class Question implements Parcelable {
                 ", description='" + description + '\'' +
                 ", type=" + type +
                 ", choices=" + choices +
-                ", isTrue=" + isAnswerTrue +
+                ", isAnswerTrue=" + isAnswerTrue +
+                ", correctAnswer='" + correctAnswer + '\'' +
                 '}';
     }
 
@@ -156,6 +167,7 @@ public class Question implements Parcelable {
         dest.writeInt(this.type);
         dest.writeTypedList(this.choices);
         dest.writeByte(this.isAnswerTrue ? (byte) 1 : (byte) 0);
+        dest.writeString(this.correctAnswer);
     }
 
     public void readFromParcel(Parcel source) {
@@ -167,6 +179,7 @@ public class Question implements Parcelable {
         this.type = source.readInt();
         this.choices = source.createTypedArrayList(QuestionChoice.CREATOR);
         this.isAnswerTrue = source.readByte() != 0;
+        this.correctAnswer = source.readString();
     }
 
     protected Question(Parcel in) {
@@ -178,6 +191,7 @@ public class Question implements Parcelable {
         this.type = in.readInt();
         this.choices = in.createTypedArrayList(QuestionChoice.CREATOR);
         this.isAnswerTrue = in.readByte() != 0;
+        this.correctAnswer = in.readString();
     }
 
     public static final Creator<Question> CREATOR = new Creator<Question>() {
