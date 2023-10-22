@@ -73,7 +73,7 @@ public class Answer implements Parcelable {
     public void correct() {
         if (question.isMultiChoices()) {
             if (selectedAnswerIndex >= 0 && selectedAnswerIndex < question.getChoices().size()) {
-                QuestionChoice rightChoice = question.getChoices().get(selectedAnswerIndex);
+                QuestionChoice rightChoice = question.getChoices().get(selectedAnswerIndex - 1);
                 isRight = rightChoice.isCorrectAnswer();
             } else {
                 isRight = false;
