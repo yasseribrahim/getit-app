@@ -21,6 +21,7 @@ import com.getit.app.models.User;
 import com.getit.app.ui.fragments.GradesFragment;
 import com.getit.app.ui.fragments.HomeFragment;
 import com.getit.app.ui.fragments.MoreFragment;
+import com.getit.app.ui.fragments.CorrectionFragment;
 import com.getit.app.ui.fragments.UsersFragment;
 import com.getit.app.utilities.helpers.StorageHelper;
 import com.google.android.material.navigation.NavigationView;
@@ -62,6 +63,10 @@ public class HomeActivity extends AppCompatActivity {
                                 case R.id.nav_grades:
                                     showFragment(GradesFragment.newInstance(), R.id.container);
                                     binding.content.toolbar.setTitle(R.string.menu_grades);
+                                    break;
+                                case R.id.nav_correction:
+                                    showFragment(CorrectionFragment.newInstance(), R.id.container);
+                                    binding.content.toolbar.setTitle(R.string.menu_correction);
                                     break;
                                 case R.id.nav_more:
                                     showFragment(MoreFragment.newInstance(), R.id.container);

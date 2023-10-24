@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.getit.app.Constants;
 import com.getit.app.models.AnswerStudent;
+import com.getit.app.models.Correction;
 import com.getit.app.persenters.BasePresenter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -13,6 +14,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AnswersPresenter implements BasePresenter {
     private DatabaseReference reference;
     private ValueEventListener listener;
@@ -21,6 +25,44 @@ public class AnswersPresenter implements BasePresenter {
     public AnswersPresenter(AnswersCallback callback) {
         reference = FirebaseDatabase.getInstance().getReference().child(Constants.NODE_NAME_ANSWERS).getRef();
         this.callback = callback;
+    }
+
+    public void search() {
+        callback.onShowLoading();
+        listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                List<Correction> corrections = new ArrayList<>();
+                for (var lessonSnapshot : snapshot.getChildren()) {
+                    for (var studentSnapshot : lessonSnapshot.getChildren()) {
+                        var answers = studentSnapshot.getValue(AnswerStudent.class);
+                        for (var answer : answers.getAnswers()) {
+                            if (!answer.isAnswered() && answer.getQuestion().isArticle()) {
+                                Correction correction = new Correction();
+                                correction.setLessonId(lessonSnapshot.getKey());
+                                correction.setStudentId(studentSnapshot.getKey());
+                                correction.setQuestionsNumber(answers.getAnswers().size());
+                                corrections.add(correction);
+                            }
+                        }
+                    }
+                }
+
+                if (callback != null) {
+                    callback.onSearchComplete(corrections);
+                    callback.onHideLoading();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                if (callback != null) {
+                    callback.onFailure("Unable to get message: " + databaseError.getMessage(), null);
+                    callback.onHideLoading();
+                }
+            }
+        };
+        reference.addListenerForSingleValueEvent(listener);
     }
 
     public void save(AnswerStudent answer) {

@@ -11,6 +11,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_teachers">Teachers</string>
     <string name="menu_grades">Grades</string>
+    <string name="menu_correction">Correction</string>
     <string name="menu_units">Units</string>
     <string name="menu_lessons">Lessons</string>
     <string name="menu_students">Students</string>

@@ -100,6 +100,36 @@ public class UnitsPresenter implements BasePresenter {
         reference.child(gradeId).addListenerForSingleValueEvent(listener);
     }
 
+    public void getUnits() {
+        callback.onShowLoading();
+        listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                List<Unit> units = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    for (var child : dataSnapshot.getChildren()) {
+                        Unit unit = child.getValue(Unit.class);
+                        units.add(unit);
+                    }
+                }
+
+                if (callback != null) {
+                    callback.onGetUnitsComplete(units);
+                    callback.onHideLoading();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                if (callback != null) {
+                    callback.onFailure("Unable to get message: " + databaseError.getMessage(), null);
+                    callback.onHideLoading();
+                }
+            }
+        };
+        reference.addListenerForSingleValueEvent(listener);
+    }
+
     public void delete(Unit unit) {
         reference.child(unit.getGradeId()).child(unit.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

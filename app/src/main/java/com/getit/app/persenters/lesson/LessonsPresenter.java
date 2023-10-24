@@ -71,6 +71,36 @@ public class LessonsPresenter implements BasePresenter {
         });
     }
 
+    public void getLessons() {
+        callback.onShowLoading();
+        listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                List<Lesson> lessons = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    for (var child : dataSnapshot.getChildren()) {
+                        Lesson lesson = child.getValue(Lesson.class);
+                        lessons.add(lesson);
+                    }
+                }
+
+                if (callback != null) {
+                    callback.onGetLessonsComplete(lessons);
+                    callback.onHideLoading();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                if (callback != null) {
+                    callback.onFailure("Unable to get message: " + databaseError.getMessage(), null);
+                    callback.onHideLoading();
+                }
+            }
+        };
+        reference.addListenerForSingleValueEvent(listener);
+    }
+
     public void getLessons(String unitId) {
         callback.onShowLoading();
         listener = new ValueEventListener() {

@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 public class Lesson implements Parcelable {
     private String id;
@@ -58,6 +59,19 @@ public class Lesson implements Parcelable {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Lesson lesson = (Lesson) o;
+        return id.equals(lesson.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override

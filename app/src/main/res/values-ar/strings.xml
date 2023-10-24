@@ -12,6 +12,7 @@
     <string name="menu_home">الصفحة الرئيسية</string>
     <string name="menu_teachers">المعلمون</string>
     <string name="menu_grades">الصفوف</string>
+    <string name="menu_correction">تصحيح</string>
     <string name="menu_units">الوحدات</string>
     <string name="menu_lessons">الدروس</string>
     <string name="menu_students">الطلاب</string>

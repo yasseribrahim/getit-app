@@ -33,7 +33,7 @@ public class UnitDetailsActivity extends BaseActivity implements LessonsCallback
     private LessonsAdapter adapter;
     private List<Lesson> lessons, searchedLessons;
     private User currentUser;
-    private Unit lesson;
+    private Unit unit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class UnitDetailsActivity extends BaseActivity implements LessonsCallback
 
         currentUser = StorageHelper.getCurrentUser();
 
-        lesson = getIntent().getParcelableExtra(Constants.ARG_OBJECT);
+        unit = getIntent().getParcelableExtra(Constants.ARG_OBJECT);
         setUpActionBar();
 
         binding.btnAdd.setVisibility(StorageHelper.getCurrentUser().isAdmin() ? View.VISIBLE : View.GONE);
@@ -72,7 +72,7 @@ public class UnitDetailsActivity extends BaseActivity implements LessonsCallback
 
     @SuppressLint("WrongConstant")
     private void setUpActionBar() {
-        binding.appBarLayout.toolbar.setTitle(lesson.getName());
+        binding.appBarLayout.toolbar.setTitle(unit.getName());
         setSupportActionBar(binding.appBarLayout.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -88,7 +88,7 @@ public class UnitDetailsActivity extends BaseActivity implements LessonsCallback
     }
 
     private void load() {
-        presenter.getLessons(lesson.getId());
+        presenter.getLessons(unit.getId());
     }
 
     private void search(String searchedText) {
@@ -169,7 +169,7 @@ public class UnitDetailsActivity extends BaseActivity implements LessonsCallback
     private AlertDialog dialog;
 
     private void addLesson(Lesson lesson) {
-        lesson.setUnitId(this.lesson.getId());
+        lesson.setUnitId(this.unit.getId());
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.str_add_new);
 
