@@ -14,9 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.getit.app.Constants;
 import com.getit.app.R;
 import com.getit.app.databinding.ActivityUnitDetailsBinding;
+import com.getit.app.models.AnswerStudent;
 import com.getit.app.models.Lesson;
 import com.getit.app.models.Unit;
 import com.getit.app.models.User;
+import com.getit.app.persenters.answer.AnswersCallback;
+import com.getit.app.persenters.answer.AnswersPresenter;
 import com.getit.app.persenters.lesson.LessonsCallback;
 import com.getit.app.persenters.lesson.LessonsPresenter;
 import com.getit.app.ui.adptres.LessonsAdapter;
@@ -27,9 +30,10 @@ import com.getit.app.utilities.helpers.StorageHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UnitDetailsActivity extends BaseActivity implements LessonsCallback, LessonsAdapter.OnLessonClickListener {
+public class UnitDetailsActivity extends BaseActivity implements LessonsCallback, AnswersCallback, LessonsAdapter.OnLessonClickListener {
     private ActivityUnitDetailsBinding binding;
     private LessonsPresenter presenter;
+    private AnswersPresenter answersPresenter;
     private LessonsAdapter adapter;
     private List<Lesson> lessons, searchedLessons;
     private User currentUser;
@@ -43,6 +47,7 @@ public class UnitDetailsActivity extends BaseActivity implements LessonsCallback
         setContentView(binding.getRoot());
 
         presenter = new LessonsPresenter(this);
+        answersPresenter = new AnswersPresenter(this);
 
         currentUser = StorageHelper.getCurrentUser();
 
@@ -155,6 +160,12 @@ public class UnitDetailsActivity extends BaseActivity implements LessonsCallback
         }
         ToastUtils.longToast(R.string.str_message_delete_successfully);
         load();
+        answersPresenter.delete(lesson.getId());
+    }
+
+    @Override
+    public void onDeleteAnswerComplete(AnswerStudent answer) {
+
     }
 
     @Override

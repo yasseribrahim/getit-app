@@ -129,6 +129,24 @@ public class AnswersPresenter implements BasePresenter {
         });
     }
 
+    public void delete(String lessonId) {
+        reference.child(lessonId).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                if (callback != null) {
+                    callback.onDeleteAnswerComplete(null);
+                    callback.onHideLoading();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onFailure(e.getMessage(), null);
+                callback.onHideLoading();
+            }
+        });
+    }
+
     public void getAnswerById(String id) {
         callback.onShowLoading();
         reference.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
