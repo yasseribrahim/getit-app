@@ -80,6 +80,7 @@ public class QuestionActivity extends BaseActivity implements QuestionsCallback,
                         ToastUtils.longToast(R.string.str_enter_value);
                         return;
                     }
+                    question.setAnswerTrue(binding.isTrueAnswer.isChecked());
                 } else if (question.isArticle()) {
                     if (binding.correctAnswer.getText().toString().isEmpty()) {
                         ToastUtils.longToast(R.string.str_enter_value);
